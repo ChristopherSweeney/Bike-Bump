@@ -11,10 +11,18 @@ import CoreLocation
 
 class LocationManager: NSObject {
     
-    let location = CLLocation()
+    let location = CLLocationManager()
     
-    init() {
-        location.r  requestAlwaysAuthorization]
-
+    override init() {
+        location.requestAlwaysAuthorization()
+        location.desiredAccuracy = kCLLocationAccuracyBest
+        location.startUpdatingLocation()
     }
+    
+    func getLocation() -> CLLocation {
+        return location.location!
+    }
+    
+    
+    
 }

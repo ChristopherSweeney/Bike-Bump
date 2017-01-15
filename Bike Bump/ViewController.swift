@@ -8,16 +8,20 @@
 
 import UIKit
 import AVFoundation
+import CoreLocation
 
 class ViewController: UIViewController {
+    
  let listener = Listener(samplingRate: 48000,soundClipDuration: 10,targetFrequncy: 3000,targetFrequncyThreshold: 50)
+ let localizer = LocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        listener.startListening()
+        //listener.startListening()
+        print((localizer.getLocation() as CLLocation).coordinate)
     }
 
-   override func didReceiveMemoryWarning() {
+   override func didReceiveMemoryWarning() {78
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }

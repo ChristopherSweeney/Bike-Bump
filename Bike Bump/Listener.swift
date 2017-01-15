@@ -47,7 +47,7 @@ class Listener: NSObject {
             try audioSession.setMode(AVAudioSessionModeMeasurement)
             self.inputNode.installTap(onBus: 0, bufferSize: 8192, format: self.inputNode.inputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                if(detectFrequency(buffer.int32ChannelData){
+                if(self.detectFrequency(buffer: buffer)){
                     //send data to server
                 }
             }
@@ -77,14 +77,20 @@ class Listener: NSObject {
     
     public func stopListening() {
         audioEngine.stop()
-        audioSession.setActive(false)
+        do {
+          try audioSession.setActive(false)
+        }
+        catch {
+            print("could not end session")
+        }
     }
     
-    func detectFrequency() -> true {
-        <#function body#>
+    func detectFrequency(buffer:AVAudioPCMBuffer) -> Bool {
+         return true
     }
-    func fft(soundClip:Double) -> <#return type#> {
-        <#function body#>
+    
+    func fft(soundClip:Double) -> Bool {
+        return true
     }
     
     
