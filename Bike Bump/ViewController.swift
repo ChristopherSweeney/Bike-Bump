@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
-
+ let listener = Listener(samplingRate: 48000,soundClipDuration: 10,targetFrequncy: 3000,targetFrequncyThreshold: 50)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let listener = Listener(samplingRate: 48000,soundClipDuration: 10,targetFrequncy: 3000,targetFrequncyThreshold: 50)
         listener.startListening()
     }
 
-    override func didReceiveMemoryWarning() {
+   override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }

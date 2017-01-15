@@ -16,6 +16,7 @@
 		BB42C85E1E273CD600BB4024 /* Bike_BumpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C85D1E273CD600BB4024 /* Bike_BumpUITests.swift */; };
 		BB42C8701E2BE90D00BB4024 /* Listener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C86F1E2BE90D00BB4024 /* Listener.swift */; };
 		BB42C8721E2BE92400BB4024 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8711E2BE92400BB4024 /* NetworkManager.swift */; };
+		BB42C8741E2C281400BB4024 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8731E2C281400BB4024 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		BB42C85F1E273CD600BB4024 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB42C86F1E2BE90D00BB4024 /* Listener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listener.swift; sourceTree = "<group>"; };
 		BB42C8711E2BE92400BB4024 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		BB42C8731E2C281400BB4024 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				BB42C8491E273CD600BB4024 /* Info.plist */,
 				BB42C86F1E2BE90D00BB4024 /* Listener.swift */,
 				BB42C8711E2BE92400BB4024 /* NetworkManager.swift */,
+				BB42C8731E2C281400BB4024 /* LocationManager.swift */,
 			);
 			path = "Bike Bump";
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			files = (
 				BB42C8721E2BE92400BB4024 /* NetworkManager.swift in Sources */,
 				BB42C8401E273CD600BB4024 /* ViewController.swift in Sources */,
+				BB42C8741E2C281400BB4024 /* LocationManager.swift in Sources */,
 				BB42C8701E2BE90D00BB4024 /* Listener.swift in Sources */,
 				BB42C83E1E273CD600BB4024 /* AppDelegate.swift in Sources */,
 			);

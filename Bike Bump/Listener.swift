@@ -8,15 +8,16 @@
 
 import UIKit
 import AVFoundation
+import Accelerate
 
 /* The Listener object buffers mic input and sends a sound clip if a central frequency is heard at a certain frequency */
 
 class Listener: NSObject {
     
     //constants
-    let audioEngine:AVAudioEngine = AVAudioEngine()
-    let audioSession = AVAudioSession.sharedInstance()
     let ioBufferDuration = 128.0 / 44100.0
+    var audioEngine:AVAudioEngine = AVAudioEngine()
+    var audioSession = AVAudioSession.sharedInstance()
     
     //params
     var inputNode:AVAudioInputNode//microphone node
@@ -42,14 +43,14 @@ class Listener: NSObject {
             try audioSession.setActive(true)
             try audioSession.setCategory(AVAudioSessionCategoryRecord)
             try audioSession.setPreferredSampleRate(self.samplingRate)
-           // try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
+            // try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
             try audioSession.setMode(AVAudioSessionModeMeasurement)
-            
-            self.inputNode.installTap(onBus: 0, bufferSize: 2048, format: inputNode.inputFormat(forBus: 0)) {
+            self.inputNode.installTap(onBus: 0, bufferSize: 8192, format: self.inputNode.inputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                Swift.print(buffer.frameLength)
+                if(detectFrequency(buffer.int32ChannelData){
+                    //send data to server
+                }
             }
-
         }
         //cancel recording if any problems
         catch {
@@ -64,11 +65,8 @@ class Listener: NSObject {
             if permissionGranted {
                 self.initializeAudioSession()
                 do {
-                    self.audioEngine.prepare()
                     try self.audioEngine.start()
                     print("started engine")
-                    print(self.inputNode.inputFormat(forBus: 0).description)
-
                 }
                 catch {
                     print("Audio Failure")
@@ -79,6 +77,14 @@ class Listener: NSObject {
     
     public func stopListening() {
         audioEngine.stop()
+        audioSession.setActive(false)
+    }
+    
+    func detectFrequency() -> true {
+        <#function body#>
+    }
+    func fft(soundClip:Double) -> <#return type#> {
+        <#function body#>
     }
     
     

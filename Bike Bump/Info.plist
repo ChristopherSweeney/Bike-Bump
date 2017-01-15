@@ -43,5 +43,7 @@
 	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Bike Bump is requesting access to use your microphone</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Bike Bump needs to access your location</string>
 </dict>
 </plist>
