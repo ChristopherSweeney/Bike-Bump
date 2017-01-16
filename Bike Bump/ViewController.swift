@@ -12,16 +12,16 @@ import CoreLocation
 
 class ViewController: UIViewController {
     
- let listener = Listener(samplingRate: 48000,soundClipDuration: 10,targetFrequncy: 3000,targetFrequncyThreshold: 50)
+ let listener = Listener(samplingRate: 44100,soundClipDuration: 10,targetFrequncy: 3000,targetFrequncyThreshold: 50)
  let localizer = LocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //listener.startListening()
-        print((localizer.getLocation() as CLLocation).coordinate)
+        listener.startListening()
+//        print((localizer.getLocation() as CLLocation).coordinate)
     }
 
-   override func didReceiveMemoryWarning() {78
+   override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }

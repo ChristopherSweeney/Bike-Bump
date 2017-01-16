@@ -11,6 +11,8 @@ import CoreLocation
 
 class LocationManager: NSObject {
     
+//    let sharedLocationManager = LocationManager()
+    
     let location = CLLocationManager()
     
     override init() {
