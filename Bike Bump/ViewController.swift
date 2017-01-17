@@ -12,7 +12,7 @@ import CoreLocation
 
 class ViewController: UIViewController {
     
- let listener = Listener(samplingRate: 44100,soundClipDuration: 10,targetFrequncy: 3000,targetFrequncyThreshold: 50)
+    let listener = Listener(samplingRate: 44100,soundClipDuration: 10,targetFrequncy: 3000,targetFrequncyThreshold: 50, bufferLength: 8192)
  let localizer = LocationManager()
     
     override func viewDidLoad() {
