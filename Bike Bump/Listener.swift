@@ -103,8 +103,14 @@ class Listener: NSObject {
     
     func fft(soundClip:AVAudioPCMBuffer) -> Bool {
         print("fft")
-        var buffer:UnsafeBufferPointer = UnsafeBufferPointer(start: soundClip.floatChannelData, count: Int(soundClip.frameLength));
-        //let buffer = UnsafeBufferPointer(soundClip.audioBufferList[0].mBuffers)
+        var array:[DSPDoubleComplex] = [DSPDoubleComplex]
+        var audio:UnsafePointer<UnsafeMutablePointer<Float>> = soundClip.floatChannelData!
+        for i in stride(from: 0, to: soundClip.frameLength, by: 1) {
+            array.append(DSPDoubleComplex(real: Double(audio[0][Int(i)]), imag: 0))
+        }
+        print(soundClip.frameLength)
+        print(soundClip.stride)
+
         let n = NSInteger(soundClip.frameLength)
         let n2 = vDSP_Length(n/2)
         let log_n = vDSP_Length(log2(Float(soundClip.frameLength)))
@@ -126,21 +132,18 @@ class Listener: NSObject {
         // Forward FFT
         // ----------------------------------------------------------------
         
-        var valuesAsComplex : UnsafeMutablePointer<DSPDoubleComplex>?
-//      valuesAsComplex = UnsafeMutablePointer<DSPDoubleComplex>(buffer.baseAddress)
-        var numbers:[DSPDoubleComplex] = Array(buffer).map{(DSPDoubleComplex(real: Double($0),imag: 0))}
-        valuesAsComplex = &numbers
-
         
         // Scramble-pack the real data into complex buffer in just the way that's
         // required by the real-to-complex FFT function that follows.
-        vDSP_ctozD(valuesAsComplex!, 2, &tempSplitComplex, 1, n2);
+        vDSP_ctozD(&array, 2, &tempSplitComplex, 1, n2);
         
         // Do real->complex forward FFT
         vDSP_fft_zripD(fftSetup, &tempSplitComplex, 1, log_n, FFTDirection(FFT_FORWARD));
        
-        let magnitudes = Array(zip(Array(UnsafeBufferPointer(start: tempSplitComplex.realp, count:Int(n2))),Array(UnsafeBufferPointer(start: tempSplitComplex.imagp, count:Int(n2)))).map { (sqrt(pow($0,2)+pow($1,2)))})
-        print(magnitudes)
+//        let magnitudes = Array(zip(Array(UnsafeBufferPointer(start: tempSplitComplex.realp, count:Int(n2))),Array(UnsafeBufferPointer(start: tempSplitComplex.imagp, count:Int(n2)))).map { (sqrt(pow($0,2)+pow($1,2)))})
+//        print(magnitudes)
+        
+        return true
         
     }
 //    func fileProcessingFormat() -> Dictionary<String, Any>
