@@ -62,7 +62,7 @@ public class Listener: NSObject {
         self.soundClipDuration = soundClipDuration
         self.currentSoundBuffers = []
         self.numBufferPerClip = Int(soundClipDuration*samplingRate/Double(bufferLength))
-        
+        print(numBufferPerClip)
         formatter.dateFormat = "dd.MM.yyyy.mm.ss"
 
 
@@ -84,16 +84,20 @@ public class Listener: NSObject {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                 if(self.currentSoundBuffers.count < self.numBufferPerClip){
                     self.currentSoundBuffers.append(buffer)
+                    print(self.currentSoundBuffers.count)
                 }
                 else {
+                    print("here")
+                    print(self.currentSoundBuffers.count)
                     self.currentSoundBuffers.remove(at: 0)
                     self.currentSoundBuffers.append(buffer)
                     if(self.detectFrequency(buffer: buffer)){
                         do {
-                            let fileName:String = "Audio_Sample" + self.formatter.string(from: Date())
+                            let fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())
+                            print(fileName)
                             var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
                             for buffer in self.currentSoundBuffers {
-                                //remeber to delet file after sending
+                                //remeber to delete file after sending
                                 try file.write(from: buffer)
                             }
                             //empty sound cache
@@ -174,13 +178,13 @@ public class Listener: NSObject {
         // Normalize the Amplitudes
         var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
         //use reduce to iterate though once
-        print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
+        //print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
 //        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
 //        
 //        print(fullSpectrum)
         
         
-        return false
+        return true
         
     }
     
