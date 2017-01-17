@@ -7,7 +7,14 @@
 //
 
 import UIKit
+import AVFoundation
 
 public class NetworkManager: NSObject {
 
+    let sharedNetweorkManager = NetworkManager()
+    
+    //return type clousure to signal successs
+    func sendToServer(file: AVAudioFile) -> Bool {
+        return true
+    }
 }

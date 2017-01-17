@@ -6,6 +6,7 @@
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
 
+
 import UIKit
 import AVFoundation
 import Accelerate
@@ -88,13 +89,23 @@ public class Listener: NSObject {
                     self.currentSoundBuffers.remove(at: 0)
                     self.currentSoundBuffers.append(buffer)
                     if(self.detectFrequency(buffer: buffer)){
-                        self.currentSoundBuffers.removeAll()
-                        var file:AVAudioFile = AVAudioFile(forWriting: URL("audio_sample_" + formatter.string(from: Date())), settings: self.audioFileSettings())
-                        DispatchQueue.global(qos: .background).async {
-                            print("This is run on the background queue")
-                            
-                                                    }
-                        
+                        do {
+                            let fileName:String = "Audio_Sample" + self.formatter.string(from: Date())
+                            var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
+                            for buffer in self.currentSoundBuffers {
+                                //remeber to delet file after sending
+                                try file.write(from: buffer)
+                            }
+                            //empty sound cache
+                            self.currentSoundBuffers.removeAll()
+//                            file = nil
+                            DispatchQueue.global(qos: .background).async {
+                                print("sending to server")
+                            }
+                        }
+                        catch{
+                            print("could not create file")
+                        }
                     }
 
                 }
@@ -157,19 +168,19 @@ public class Listener: NSObject {
         vDSP_fft_zript(fftSetup!, &splitComplex, vDSP_Stride(1), &tempSplitComplex, log_n, FFTDirection(FFT_FORWARD));
         
        //analyze results
-        var fftMagnitudes = [Float](repeating:0.0, count:n)
-        vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
+        var fftMagnitudes = [Float](repeating:0.0, count:Int(n2))
+        vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, n2);
         let roots = fftMagnitudes.map {sqrtf($0)}
         // Normalize the Amplitudes
-        var fullSpectrum = [Float](repeating:0.0, count:Int(n2)/2)
-        print(roots.max() ?? Float())
-        
+        var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
+        //use reduce to iterate though once
+        print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
 //        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
 //        
 //        print(fullSpectrum)
         
         
-        return true
+        return false
         
     }
     
@@ -180,6 +191,10 @@ public class Listener: NSObject {
             AVNumberOfChannelsKey : 1,
             AVFormatIDKey : kAudioFormatLinearPCM
         ]
+    }
+    
+    private func indexToFrequency(N:Int, index:Int) -> Double {
+        return Double(index)*self.samplingRate/Double(N)
     }
     
 }
