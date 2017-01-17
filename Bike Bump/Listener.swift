@@ -12,7 +12,7 @@ import Accelerate
 
 /* The Listener object buffers mic input and sends a sound clip if a central frequency is heard at a certain frequency */
 
-class Listener: NSObject {
+public class Listener: NSObject {
     
     //constants
     let ioBufferDuration = 128.0 / 44100.0
@@ -103,45 +103,39 @@ class Listener: NSObject {
     
     func fft(soundClip:AVAudioPCMBuffer) -> Bool {
         print("fft")
-        var array:[DSPDoubleComplex] = [DSPDoubleComplex]
-        var audio:UnsafePointer<UnsafeMutablePointer<Float>> = soundClip.floatChannelData!
-        for i in stride(from: 0, to: soundClip.frameLength, by: 1) {
-            array.append(DSPDoubleComplex(real: Double(audio[0][Int(i)]), imag: 0))
-        }
-        print(soundClip.frameLength)
-        print(soundClip.stride)
-
         let n = NSInteger(soundClip.frameLength)
         let n2 = vDSP_Length(n/2)
         let log_n = vDSP_Length(log2(Float(soundClip.frameLength)))
 
-        let fftSetup: FFTSetupD = vDSP_create_fftsetupD(log_n, FFTRadix(kFFTRadix2))!
+        let fftSetup: FFTSetupD = vDSP_create_fftsetup(log_n, FFTRadix(kFFTRadix2))!
         
-        // We need complex buffers in two different formats!
-        var tempComplex : [DSPDoubleComplex] = [DSPDoubleComplex](repeating: DSPDoubleComplex(), count: n/2)
-        
-        var tempSplitComplexReal : [Double] = [Double](repeating: 0.0, count: n/2)
-        var tempSplitComplexImag : [Double] = [Double](repeating: 0.0, count: n/2)
-        var tempSplitComplex : DSPDoubleSplitComplex = DSPDoubleSplitComplex(realp: &tempSplitComplexReal, imagp: &tempSplitComplexImag)
-        
-        // For polar coordinates
-        var mag : [Double] = [Double](repeating: 0.0, count: n/2)
-        var phase : [Double] = [Double](repeating: 0.0, count: n/2)
+              
+        var tempSplitComplexReal : [Float] = [Float](repeating: 0.0, count: n/2)
+        var tempSplitComplexImag : [Float] = [Float](repeating: 0.0, count: n/2)
+        var tempSplitComplex : DSPSplitComplex = DSPSplitComplex(realp: &tempSplitComplexReal, imagp: &tempSplitComplexImag)
+        var splitComplex : DSPSplitComplex = DSPSplitComplex(realp: soundClip.floatChannelData![0], imagp: &tempSplitComplexImag)
         
         // ----------------------------------------------------------------
         // Forward FFT
         // ----------------------------------------------------------------
         
         
-        // Scramble-pack the real data into complex buffer in just the way that's
-        // required by the real-to-complex FFT function that follows.
-        vDSP_ctozD(&array, 2, &tempSplitComplex, 1, n2);
-        
         // Do real->complex forward FFT
-        vDSP_fft_zripD(fftSetup, &tempSplitComplex, 1, log_n, FFTDirection(FFT_FORWARD));
+        vDSP_fft_zript(fftSetup, &splitComplex, vDSP_Stride(1), &tempSplitComplex, log_n, FFTDirection(FFT_FORWARD));
        
-//        let magnitudes = Array(zip(Array(UnsafeBufferPointer(start: tempSplitComplex.realp, count:Int(n2))),Array(UnsafeBufferPointer(start: tempSplitComplex.imagp, count:Int(n2)))).map { (sqrt(pow($0,2)+pow($1,2)))})
-//        print(magnitudes)
+        var fftMagnitudes = [Float](repeating:0.0, count:n/2)
+        vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, n2);
+        
+        // vDSP_zvmagsD returns squares of the FFT magnitudes, so take the root here
+        let roots = fftMagnitudes.map {sqrtf($0)}
+        
+        // Normalize the Amplitudes
+        var fullSpectrum = [Float](repeating:0.0, count:Int(n2)/2)
+        print(roots)
+        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
+        
+        print(fullSpectrum)
+        
         
         return true
         

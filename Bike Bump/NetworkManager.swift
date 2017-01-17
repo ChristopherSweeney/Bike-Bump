@@ -8,6 +8,6 @@
 
 import UIKit
 
-class NetworkManager: NSObject {
+public class NetworkManager: NSObject {
 
 }

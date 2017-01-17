@@ -14,9 +14,11 @@
 		BB42C8481E273CD600BB4024 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB42C8461E273CD600BB4024 /* LaunchScreen.storyboard */; };
 		BB42C8531E273CD600BB4024 /* Bike_BumpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8521E273CD600BB4024 /* Bike_BumpTests.swift */; };
 		BB42C85E1E273CD600BB4024 /* Bike_BumpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C85D1E273CD600BB4024 /* Bike_BumpUITests.swift */; };
-		BB42C8701E2BE90D00BB4024 /* Listener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C86F1E2BE90D00BB4024 /* Listener.swift */; };
 		BB42C8721E2BE92400BB4024 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8711E2BE92400BB4024 /* NetworkManager.swift */; };
 		BB42C8741E2C281400BB4024 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8731E2C281400BB4024 /* LocationManager.swift */; };
+		BBB771C81E2EA1D30082A2DF /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */; };
+		BBB771C91E2EA2640082A2DF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB771C11E2E9D540082A2DF /* AVFoundation.framework */; };
+		BBB771CA1E2EA2710082A2DF /* Listener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C86F1E2BE90D00BB4024 /* Listener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		BBB771C51E2EA0790082A2DF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		BB42C83A1E273CD600BB4024 /* Bike Bump.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bike Bump.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB42C83D1E273CD600BB4024 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +68,8 @@
 		BB42C86F1E2BE90D00BB4024 /* Listener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listener.swift; sourceTree = "<group>"; };
 		BB42C8711E2BE92400BB4024 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		BB42C8731E2C281400BB4024 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		BBB771C11E2E9D540082A2DF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB771C91E2EA2640082A2DF /* AVFoundation.framework in Frameworks */,
+				BBB771C81E2EA1D30082A2DF /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +106,7 @@
 				BB42C8511E273CD600BB4024 /* Bike BumpTests */,
 				BB42C85C1E273CD600BB4024 /* Bike BumpUITests */,
 				BB42C83B1E273CD600BB4024 /* Products */,
+				BBB771BE1E2E9D4D0082A2DF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,6 +154,15 @@
 			path = "Bike BumpUITests";
 			sourceTree = "<group>";
 		};
+		BBB771BE1E2E9D4D0082A2DF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBB771C11E2E9D540082A2DF /* AVFoundation.framework */,
+				BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -144,6 +173,7 @@
 				BB42C8361E273CD600BB4024 /* Sources */,
 				BB42C8371E273CD600BB4024 /* Frameworks */,
 				BB42C8381E273CD600BB4024 /* Resources */,
+				BBB771C51E2EA0790082A2DF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -272,8 +302,8 @@
 				BB42C8721E2BE92400BB4024 /* NetworkManager.swift in Sources */,
 				BB42C8401E273CD600BB4024 /* ViewController.swift in Sources */,
 				BB42C8741E2C281400BB4024 /* LocationManager.swift in Sources */,
-				BB42C8701E2BE90D00BB4024 /* Listener.swift in Sources */,
 				BB42C83E1E273CD600BB4024 /* AppDelegate.swift in Sources */,
+				BBB771CA1E2EA2710082A2DF /* Listener.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +552,7 @@
 				BB42C8641E273CD600BB4024 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BB42C8651E273CD600BB4024 /* Build configuration list for PBXNativeTarget "Bike BumpTests" */ = {
 			isa = XCConfigurationList;
@@ -530,6 +561,7 @@
 				BB42C8671E273CD600BB4024 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BB42C8681E273CD600BB4024 /* Build configuration list for PBXNativeTarget "Bike BumpUITests" */ = {
 			isa = XCConfigurationList;
@@ -538,6 +570,7 @@
 				BB42C86A1E273CD600BB4024 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

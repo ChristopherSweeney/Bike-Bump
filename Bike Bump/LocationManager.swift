@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class LocationManager: NSObject {
+public class LocationManager: NSObject {
     
 //    let sharedLocationManager = LocationManager()
     
