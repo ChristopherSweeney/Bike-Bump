@@ -73,6 +73,7 @@ public class Listener: NSObject {
             try audioSession.setActive(true)
             try audioSession.setCategory(AVAudioSessionCategoryRecord)
             try audioSession.setPreferredSampleRate(self.samplingRate)
+            try audioSession.setPreferredInputNumberOfChannels(1)
             // try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
             try audioSession.setMode(AVAudioSessionModeMeasurement)
             self.setupFilter()
@@ -93,6 +94,9 @@ public class Listener: NSObject {
                     self.currentSoundBuffers.append(buffer)
                     if(self.detectFrequency(buffer: buffer)){
                         do {
+                            print(buffer.format)
+                            print(buffer.audioBufferList[0].mNumberBuffers)
+
                             let fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())
                             print(fileName)
                             var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
@@ -190,9 +194,10 @@ public class Listener: NSObject {
     
     private func audioFileSettings() -> Dictionary<String, Any>
     {
+    
         return [
-            AVSampleRateKey : 44100,
-            AVNumberOfChannelsKey : 1,
+            AVSampleRateKey : 44100.0,
+            AVNumberOfChannelsKey : 2,
             AVFormatIDKey : kAudioFormatLinearPCM
         ]
     }
