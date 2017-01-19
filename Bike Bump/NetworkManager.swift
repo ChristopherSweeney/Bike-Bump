@@ -5,7 +5,7 @@
 //  Created by Chris Sweeney on 1/15/17.
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
-
+import FirebaseCore
 import UIKit
 import AVFoundation
 

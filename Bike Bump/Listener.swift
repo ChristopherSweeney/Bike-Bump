@@ -170,7 +170,7 @@ public class Listener: NSObject {
         var tempSplitComplexReal : [Float] = [Float](repeating: 0.0, count: n/2)
         var tempSplitComplexImag : [Float] = [Float](repeating: 0.0, count: n/2)
         var tempSplitComplex : DSPSplitComplex = DSPSplitComplex(realp: &tempSplitComplexReal, imagp: &tempSplitComplexImag)
-        var splitComplex : DSPSplitComplex = DSPSplitComplex(realp: soundClip.floatChannelData![0], imagp: &tempSplitComplexImag)
+        var splitComplex : DSPSplitComplex = DSPSplitComplex(realp: soundClip.floatChannelData![1], imagp: &tempSplitComplexImag)
         
         // FFT
         vDSP_fft_zript(fftSetup!, &splitComplex, vDSP_Stride(1), &tempSplitComplex, log_n, FFTDirection(FFT_FORWARD));
@@ -179,16 +179,16 @@ public class Listener: NSObject {
         var fftMagnitudes = [Float](repeating:0.0, count:Int(n2))
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, n2);
         let roots = fftMagnitudes.map {sqrtf($0)}
-        // Normalize the Amplitudes
+       
         var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
         //use reduce to iterate though once
-        //print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
+        print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
 //        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
 //        
 //        print(fullSpectrum)
         
         
-        return true
+        return false
         
     }
     

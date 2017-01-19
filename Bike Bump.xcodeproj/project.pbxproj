@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E8CF4317051371129103113 /* Pods_Bike_BumpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 767DA7A288B78CF231DEED9A /* Pods_Bike_BumpUITests.framework */; };
+		522FEBF75AAB7A1D305E3E8C /* Pods_Bike_BumpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89F5E8C4CE16AD0472B91E80 /* Pods_Bike_BumpTests.framework */; };
 		BB42C83E1E273CD600BB4024 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C83D1E273CD600BB4024 /* AppDelegate.swift */; };
 		BB42C8401E273CD600BB4024 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C83F1E273CD600BB4024 /* ViewController.swift */; };
 		BB42C8431E273CD600BB4024 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB42C8411E273CD600BB4024 /* Main.storyboard */; };
@@ -16,9 +18,11 @@
 		BB42C85E1E273CD600BB4024 /* Bike_BumpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C85D1E273CD600BB4024 /* Bike_BumpUITests.swift */; };
 		BB42C8721E2BE92400BB4024 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8711E2BE92400BB4024 /* NetworkManager.swift */; };
 		BB42C8741E2C281400BB4024 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8731E2C281400BB4024 /* LocationManager.swift */; };
+		BB4AA4E51E309FB300D9944A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */; };
 		BBB771C81E2EA1D30082A2DF /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */; };
 		BBB771C91E2EA2640082A2DF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB771C11E2E9D540082A2DF /* AVFoundation.framework */; };
 		BBB771CA1E2EA2710082A2DF /* Listener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C86F1E2BE90D00BB4024 /* Listener.swift */; };
+		EB0706F3A1C99FCF5E8286E5 /* Pods_Bike_Bump.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE3330FC0014E55C92105496 /* Pods_Bike_Bump.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +56,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01D6644C47C489EE4A7F1520 /* Pods-Bike BumpUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike BumpUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bike BumpUITests/Pods-Bike BumpUITests.release.xcconfig"; sourceTree = "<group>"; };
+		53B7E73F62C8921E19E627C9 /* Pods-Bike BumpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike BumpTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bike BumpTests/Pods-Bike BumpTests.release.xcconfig"; sourceTree = "<group>"; };
+		64481D8DD1F6443C0568DD84 /* Pods-Bike BumpUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike BumpUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bike BumpUITests/Pods-Bike BumpUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		6A2B5B5DAC1F71B7529CAAA3 /* Pods-Bike BumpTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike BumpTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bike BumpTests/Pods-Bike BumpTests.debug.xcconfig"; sourceTree = "<group>"; };
+		767DA7A288B78CF231DEED9A /* Pods_Bike_BumpUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bike_BumpUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		89F5E8C4CE16AD0472B91E80 /* Pods_Bike_BumpTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bike_BumpTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5BFE40DCBF8DEABD2AB7E37 /* Pods-Bike Bump.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike Bump.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump.debug.xcconfig"; sourceTree = "<group>"; };
+		AF70D63002D4258CBFC01B33 /* Pods-Bike Bump.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike Bump.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump.release.xcconfig"; sourceTree = "<group>"; };
 		BB42C83A1E273CD600BB4024 /* Bike Bump.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bike Bump.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB42C83D1E273CD600BB4024 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BB42C83F1E273CD600BB4024 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,8 +80,11 @@
 		BB42C86F1E2BE90D00BB4024 /* Listener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listener.swift; sourceTree = "<group>"; };
 		BB42C8711E2BE92400BB4024 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		BB42C8731E2C281400BB4024 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BB7CAECE1E2FF6EA0070BF66 /* Firebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Firebase.h; sourceTree = "<group>"; };
 		BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		BBB771C11E2E9D540082A2DF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		BE3330FC0014E55C92105496 /* Pods_Bike_Bump.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bike_Bump.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +94,7 @@
 			files = (
 				BBB771C91E2EA2640082A2DF /* AVFoundation.framework in Frameworks */,
 				BBB771C81E2EA1D30082A2DF /* Accelerate.framework in Frameworks */,
+				EB0706F3A1C99FCF5E8286E5 /* Pods_Bike_Bump.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				522FEBF75AAB7A1D305E3E8C /* Pods_Bike_BumpTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,20 +110,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E8CF4317051371129103113 /* Pods_Bike_BumpUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		363AD06A81CF01B6127D2FBC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A5BFE40DCBF8DEABD2AB7E37 /* Pods-Bike Bump.debug.xcconfig */,
+				AF70D63002D4258CBFC01B33 /* Pods-Bike Bump.release.xcconfig */,
+				6A2B5B5DAC1F71B7529CAAA3 /* Pods-Bike BumpTests.debug.xcconfig */,
+				53B7E73F62C8921E19E627C9 /* Pods-Bike BumpTests.release.xcconfig */,
+				64481D8DD1F6443C0568DD84 /* Pods-Bike BumpUITests.debug.xcconfig */,
+				01D6644C47C489EE4A7F1520 /* Pods-Bike BumpUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		BB42C8311E273CD500BB4024 = {
 			isa = PBXGroup;
 			children = (
+				BB7CAECE1E2FF6EA0070BF66 /* Firebase.h */,
 				BB42C83C1E273CD600BB4024 /* Bike Bump */,
 				BB42C8511E273CD600BB4024 /* Bike BumpTests */,
 				BB42C85C1E273CD600BB4024 /* Bike BumpUITests */,
 				BB42C83B1E273CD600BB4024 /* Products */,
 				BBB771BE1E2E9D4D0082A2DF /* Frameworks */,
+				363AD06A81CF01B6127D2FBC /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -129,6 +162,7 @@
 				BB42C8441E273CD600BB4024 /* Assets.xcassets */,
 				BB42C8461E273CD600BB4024 /* LaunchScreen.storyboard */,
 				BB42C8491E273CD600BB4024 /* Info.plist */,
+				BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */,
 				BB42C86F1E2BE90D00BB4024 /* Listener.swift */,
 				BB42C8711E2BE92400BB4024 /* NetworkManager.swift */,
 				BB42C8731E2C281400BB4024 /* LocationManager.swift */,
@@ -159,6 +193,9 @@
 			children = (
 				BBB771C11E2E9D540082A2DF /* AVFoundation.framework */,
 				BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */,
+				BE3330FC0014E55C92105496 /* Pods_Bike_Bump.framework */,
+				89F5E8C4CE16AD0472B91E80 /* Pods_Bike_BumpTests.framework */,
+				767DA7A288B78CF231DEED9A /* Pods_Bike_BumpUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -170,10 +207,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB42C8621E273CD600BB4024 /* Build configuration list for PBXNativeTarget "Bike Bump" */;
 			buildPhases = (
+				84B007F752225172B9527DB2 /* [CP] Check Pods Manifest.lock */,
 				BB42C8361E273CD600BB4024 /* Sources */,
 				BB42C8371E273CD600BB4024 /* Frameworks */,
 				BB42C8381E273CD600BB4024 /* Resources */,
 				BBB771C51E2EA0790082A2DF /* Embed Frameworks */,
+				9BDE0C8FDFBCED13617E85B5 /* [CP] Embed Pods Frameworks */,
+				3E975066DBC2208154F89362 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -188,9 +228,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB42C8651E273CD600BB4024 /* Build configuration list for PBXNativeTarget "Bike BumpTests" */;
 			buildPhases = (
+				5559D799A6E10EE88DF8104B /* [CP] Check Pods Manifest.lock */,
 				BB42C84A1E273CD600BB4024 /* Sources */,
 				BB42C84B1E273CD600BB4024 /* Frameworks */,
 				BB42C84C1E273CD600BB4024 /* Resources */,
+				F24060C2181611EACA499DC0 /* [CP] Embed Pods Frameworks */,
+				8CC7AAE1A89489A1CA038C14 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -206,9 +249,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB42C8681E273CD600BB4024 /* Build configuration list for PBXNativeTarget "Bike BumpUITests" */;
 			buildPhases = (
+				13017708DE8A46AEBABA4AD8 /* [CP] Check Pods Manifest.lock */,
 				BB42C8551E273CD600BB4024 /* Sources */,
 				BB42C8561E273CD600BB4024 /* Frameworks */,
 				BB42C8571E273CD600BB4024 /* Resources */,
+				8B6F1E508E58CA0C0A83A082 /* [CP] Embed Pods Frameworks */,
+				2CBEF3AC138F308CF89AB7AA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -273,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB42C8481E273CD600BB4024 /* LaunchScreen.storyboard in Resources */,
+				BB4AA4E51E309FB300D9944A /* GoogleService-Info.plist in Resources */,
 				BB42C8451E273CD600BB4024 /* Assets.xcassets in Resources */,
 				BB42C8431E273CD600BB4024 /* Main.storyboard in Resources */,
 			);
@@ -293,6 +340,144 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		13017708DE8A46AEBABA4AD8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		2CBEF3AC138F308CF89AB7AA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bike BumpUITests/Pods-Bike BumpUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3E975066DBC2208154F89362 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5559D799A6E10EE88DF8104B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		84B007F752225172B9527DB2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8B6F1E508E58CA0C0A83A082 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bike BumpUITests/Pods-Bike BumpUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8CC7AAE1A89489A1CA038C14 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bike BumpTests/Pods-Bike BumpTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9BDE0C8FDFBCED13617E85B5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F24060C2181611EACA499DC0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bike BumpTests/Pods-Bike BumpTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BB42C8361E273CD600BB4024 /* Sources */ = {
@@ -453,9 +638,14 @@
 		};
 		BB42C8631E273CD600BB4024 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A5BFE40DCBF8DEABD2AB7E37 /* Pods-Bike Bump.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CXHXL38L66;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Bike Bump/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -467,12 +657,18 @@
 		};
 		BB42C8641E273CD600BB4024 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF70D63002D4258CBFC01B33 /* Pods-Bike Bump.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CXHXL38L66;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Bike Bump/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "ChaningPlaces.Bike-Bump";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -481,6 +677,7 @@
 		};
 		BB42C8661E273CD600BB4024 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A2B5B5DAC1F71B7529CAAA3 /* Pods-Bike BumpTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -495,6 +692,7 @@
 		};
 		BB42C8671E273CD600BB4024 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53B7E73F62C8921E19E627C9 /* Pods-Bike BumpTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -509,6 +707,7 @@
 		};
 		BB42C8691E273CD600BB4024 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 64481D8DD1F6443C0568DD84 /* Pods-Bike BumpUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = "Bike BumpUITests/Info.plist";
@@ -522,6 +721,7 @@
 		};
 		BB42C86A1E273CD600BB4024 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 01D6644C47C489EE4A7F1520 /* Pods-Bike BumpUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = "Bike BumpUITests/Info.plist";

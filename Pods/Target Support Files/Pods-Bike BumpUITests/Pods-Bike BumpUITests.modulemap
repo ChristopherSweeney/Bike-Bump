@@ -1,0 +1,6 @@
+framework module Pods_Bike_BumpUITests {
+  umbrella header "Pods-Bike BumpUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

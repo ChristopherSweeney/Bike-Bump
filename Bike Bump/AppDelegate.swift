@@ -5,7 +5,7 @@
 //  Created by Chris Sweeney on 1/11/17.
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
-
+import Firebase
 import UIKit
 import AVFoundation
 
@@ -14,9 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    let audioEngine  = AVAudioEngine()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        FIRApp.configure()
         return true
     }
 
