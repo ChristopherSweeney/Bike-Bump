@@ -11,7 +11,7 @@ import AVFoundation
 import CoreLocation
 
 class AuthenticationController: UIViewController {
-    
+    //store crudentials locally
     @IBOutlet weak var user: UITextField!
     //encrypt dots
     @IBOutlet weak var password: UITextField!
@@ -20,6 +20,7 @@ class AuthenticationController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loginButton.addTarget(self, action: #selector(self.login), for:  UIControlEvents.touchUpInside)
     }
 
    override func didReceiveMemoryWarning() {
@@ -27,6 +28,9 @@ class AuthenticationController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    func login() {
+        let storyboard = self.storyboard
+        let controller = storyboard?.instantiateViewController(withIdentifier: "BikeInProgressController")
+        self.present(controller!, animated: true, completion: nil)    }
 }
 

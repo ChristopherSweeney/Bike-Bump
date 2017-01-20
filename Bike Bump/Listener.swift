@@ -70,6 +70,7 @@ public class Listener: NSObject {
     
     private func initializeAudio() {
         do {
+//            audioEngine = AVAudioEngine()//very hacky
             try audioSession.setActive(true)
             try audioSession.setCategory(AVAudioSessionCategoryRecord)
             try audioSession.setPreferredSampleRate(self.samplingRate)
@@ -85,11 +86,11 @@ public class Listener: NSObject {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                 if(self.currentSoundBuffers.count < self.numBufferPerClip){
                     self.currentSoundBuffers.append(buffer)
-                    print(self.currentSoundBuffers.count)
+                    //print(self.currentSoundBuffers.count)
                 }
                 else {
-                    print("here")
-                    print(self.currentSoundBuffers.count)
+                    //print("here")
+                   // print(self.currentSoundBuffers.count)
                     self.currentSoundBuffers.remove(at: 0)
                     self.currentSoundBuffers.append(buffer)
                     if(self.detectFrequency(buffer: buffer)){
@@ -133,6 +134,7 @@ public class Listener: NSObject {
     }
     
     public func startListening() {
+        //offload initianliztion so you can start and stop
         audioSession.requestRecordPermission({(permissionGranted: Bool) -> Void in
             if permissionGranted {
                 self.initializeAudio()
@@ -149,7 +151,7 @@ public class Listener: NSObject {
     }
     
     public func stopListening() {
-        //anything else to close down- AVAudio File
+        //anything else to close down - AVAudio File
         audioEngine.stop()
         do {
           try audioSession.setActive(false)

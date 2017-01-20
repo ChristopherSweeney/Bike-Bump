@@ -28,8 +28,11 @@ class BikeInProgressController: UIViewController {
         super.viewDidLoad()
         isRideInProgress = false
         endRide.isEnabled = false
-        startRide.layer.cornerRadius = 4
-        endRide.layer.cornerRadius = 4
+        startRide.layer.cornerRadius = 10
+        endRide.layer.cornerRadius = 10
+        startRide.addTarget(self, action: #selector(self.start), for:  UIControlEvents.touchUpInside)
+        endRide.addTarget(self, action: #selector(self.end), for:  UIControlEvents.touchUpInside)
+
         
     }
     
@@ -45,6 +48,7 @@ class BikeInProgressController: UIViewController {
         rideInProgress.startAnimating()
         startRide.isEnabled = false
         endRide.isEnabled = true
+        inProgressDescription.isHidden = false
     }
     
     func end() {
@@ -53,6 +57,8 @@ class BikeInProgressController: UIViewController {
         rideInProgress.stopAnimating()
         startRide.isEnabled = true
         endRide.isEnabled = false
+        inProgressDescription.isHidden = true
+
 
     }
 }
