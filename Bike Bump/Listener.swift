@@ -149,6 +149,7 @@ public class Listener: NSObject {
     }
     
     public func stopListening() {
+        //anything else to close down- AVAudio File
         audioEngine.stop()
         do {
           try audioSession.setActive(false)

@@ -6,6 +6,7 @@ target 'Bike Bump' do
   # dynamic frameworks
   use_frameworks!
   pod 'Firebase/Core'
+  pod 'Firebase/Auth'
 
 
   target 'Bike BumpTests' do
