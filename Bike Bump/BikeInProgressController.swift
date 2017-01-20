@@ -21,18 +21,22 @@ class BikeInProgressController: UIViewController {
     @IBOutlet weak var startRide: UIButton!
     
     //moniters
-    let listener = Listener(samplingRate: 44100,soundClipDuration: 5,targetFrequncy: 3000,targetFrequncyThreshold: 50, bufferLength: 8192)
+    let listener = Listener(samplingRate: 44100,soundClipDuration: 5,targetFrequncy: 3000,targetFrequncyThreshold: 50, bufferLength: 8192, lowPassFreq: 4000)
     let localizer = LocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //setup audio processing graph
+        listener.initializeAudio()
+        
+        //setup UI
         isRideInProgress = false
         endRide.isEnabled = false
         startRide.layer.cornerRadius = 10
         endRide.layer.cornerRadius = 10
         startRide.addTarget(self, action: #selector(self.start), for:  UIControlEvents.touchUpInside)
         endRide.addTarget(self, action: #selector(self.end), for:  UIControlEvents.touchUpInside)
-
         
     }
     
@@ -41,7 +45,7 @@ class BikeInProgressController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //one functoin with toggling state
+    //one function with toggling state
     func start() {
         listener.startListening()
         rideInProgress.isHidden = false

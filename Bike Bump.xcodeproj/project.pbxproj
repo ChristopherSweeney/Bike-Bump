@@ -158,15 +158,12 @@
 			children = (
 				BB42C83D1E273CD600BB4024 /* AppDelegate.swift */,
 				BB42C83F1E273CD600BB4024 /* AuthenticationController.swift */,
-				BB42C8411E273CD600BB4024 /* Main.storyboard */,
-				BB42C8441E273CD600BB4024 /* Assets.xcassets */,
-				BB42C8461E273CD600BB4024 /* LaunchScreen.storyboard */,
-				BB42C8491E273CD600BB4024 /* Info.plist */,
-				BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */,
 				BB42C86F1E2BE90D00BB4024 /* Listener.swift */,
 				BB42C8711E2BE92400BB4024 /* NetworkManager.swift */,
 				BB42C8731E2C281400BB4024 /* LocationManager.swift */,
 				BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */,
+				BBB2B9DE1E327FCB003975C5 /* UI */,
+				BBB2B9DD1E327FAF003975C5 /* SupportingFiles */,
 			);
 			path = "Bike Bump";
 			sourceTree = "<group>";
@@ -187,6 +184,25 @@
 				BB42C85F1E273CD600BB4024 /* Info.plist */,
 			);
 			path = "Bike BumpUITests";
+			sourceTree = "<group>";
+		};
+		BBB2B9DD1E327FAF003975C5 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				BB42C8491E273CD600BB4024 /* Info.plist */,
+				BB42C8441E273CD600BB4024 /* Assets.xcassets */,
+				BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */,
+			);
+			name = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		BBB2B9DE1E327FCB003975C5 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				BB42C8411E273CD600BB4024 /* Main.storyboard */,
+				BB42C8461E273CD600BB4024 /* LaunchScreen.storyboard */,
+			);
+			name = UI;
 			sourceTree = "<group>";
 		};
 		BBB771BE1E2E9D4D0082A2DF /* Frameworks */ = {

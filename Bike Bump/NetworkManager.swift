@@ -9,9 +9,14 @@ import FirebaseCore
 import UIKit
 import AVFoundation
 
+let sharedNetweorkManager = NetworkManager()
+
 public class NetworkManager: NSObject {
 
-    let sharedNetweorkManager = NetworkManager()
+    
+    override init() {
+        
+    }
     
     //return type clousure to signal successs
     func sendToServer(file: AVAudioFile) -> Bool {

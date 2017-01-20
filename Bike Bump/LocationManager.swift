@@ -9,8 +9,9 @@
 import UIKit
 import CoreLocation
 
+public let sharedLocationManager = LocationManager()
+
 public class LocationManager: NSObject {
-    let sharedLocationManager = LocationManager()
     
     let location = CLLocationManager()
     

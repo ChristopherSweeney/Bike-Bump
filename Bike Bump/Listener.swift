@@ -35,6 +35,7 @@ public class Listener: NSObject {
     var audioSession = AVAudioSession.sharedInstance()
     var inputNode:AVAudioInputNode//microphone node
     var filter:AVAudioUnitEQ//lowpass filter
+    var lowPassFreq:Int
     
     //microphone harware params
     // let ioBufferDuration = 128.0 / 44100.0
@@ -42,17 +43,22 @@ public class Listener: NSObject {
     var targetFrequncy:Double //hz
     var targetFrequncyThreshold:Double //hz
     
+    let soundQueue:DispatchQueue = DispatchQueue(label: "com.example.audiofftqueue")
+
+    var len = 0
     init(samplingRate:Double,
          soundClipDuration:Double,
          targetFrequncy:Double,
          targetFrequncyThreshold:Double,
-         bufferLength:Int) {
+         bufferLength:Int,
+         lowPassFreq:Int) {
         
         self.samplingRate = samplingRate
         self.targetFrequncy = targetFrequncy
         self.targetFrequncyThreshold = targetFrequncyThreshold
         self.inputNode = audioEngine.inputNode!
         self.filter = AVAudioUnitEQ(numberOfBands:1)
+        self.lowPassFreq = lowPassFreq
         
         self.n = NSInteger(bufferLength)
         self.n2 = vDSP_Length(bufferLength/2)
@@ -62,15 +68,13 @@ public class Listener: NSObject {
         self.soundClipDuration = soundClipDuration
         self.currentSoundBuffers = []
         self.numBufferPerClip = Int(soundClipDuration*samplingRate/Double(bufferLength))
-        print(numBufferPerClip)
         formatter.dateFormat = "dd.MM.yyyy.mm.ss"
-
+        
 
     }
     
-    private func initializeAudio() {
+    public func initializeAudio() {
         do {
-//            audioEngine = AVAudioEngine()//very hacky
             try audioSession.setActive(true)
             try audioSession.setCategory(AVAudioSessionCategoryRecord)
             try audioSession.setPreferredSampleRate(self.samplingRate)
@@ -82,39 +86,14 @@ public class Listener: NSObject {
             //keep track of how to control audio processing format -changing sample rate
             self.audioEngine.connect(inputNode, to:self.filter , format: self.filter.inputFormat(forBus: 0))
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
-                //get l4oc
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                if(self.currentSoundBuffers.count < self.numBufferPerClip){
-                    self.currentSoundBuffers.append(buffer)
+                self.len += 1
+                print(self.len)
+                //control access to global varibles via serial queue
+                self.soundQueue.sync {
+                    self.audioProcessingBlock(buffer: buffer)
                 }
-                else {
-                    self.currentSoundBuffers.remove(at: 0)
-                    self.currentSoundBuffers.append(buffer)
-                    if(self.detectFrequency(buffer: buffer)){
-                        do {
-                            print(buffer.format)
-                            print(buffer.audioBufferList[0].mNumberBuffers)
-
-                            let fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())
-                            print(fileName)
-                            var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
-                            for buffer in self.currentSoundBuffers {
-                                //remeber to delete file after sending
-                                try file.write(from: buffer)
-                            }
-                            //empty sound cache
-                            self.currentSoundBuffers.removeAll()
-//                            file = nil
-                            DispatchQueue.global(qos: .background).async {
-                                print("sending to server")
-                            }
-                        }
-                        catch{
-                            print("could not create file")
-                        }
-                    }
-
-                }
+                self.len = self.len-1
             }
         }
         //cancel recording if any problems
@@ -125,16 +104,46 @@ public class Listener: NSObject {
     
     }
     
+    func audioProcessingBlock(buffer: AVAudioPCMBuffer) {
+        
+        if(self.currentSoundBuffers.count < self.numBufferPerClip){
+            self.currentSoundBuffers.append(buffer)
+        }
+        else {
+            self.currentSoundBuffers.remove(at: 0)
+            self.currentSoundBuffers.append(buffer)
+            if(self.detectFrequency(buffer: buffer)){
+                print("detected")
+                do {
+                    let fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())
+                    var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
+                    for buffer in self.currentSoundBuffers {
+                        //remeber to delete file after sending
+                        try file.write(from: buffer)
+                    }
+                    //empty sound cache
+                    self.currentSoundBuffers.removeAll()
+                    //                              file = nil
+                    DispatchQueue.global(qos: .background).async {
+                        print("sending to server")
+                    }
+                }
+                catch{
+                    print("could not create file")
+                }
+            }
+            
+        }
+    }
     private func setupFilter(){
          filter.bands[0].filterType = AVAudioUnitEQFilterType.lowPass
-         filter.bands[0].frequency = 3000;
+         filter.bands[0].frequency = Float(lowPassFreq);
     }
-    
+
     public func startListening() {
         //offload initianliztion so you can start and stop
         audioSession.requestRecordPermission({(permissionGranted: Bool) -> Void in
             if permissionGranted {
-                self.initializeAudio()
                 do {
                     try self.audioEngine.start()
                     self.fftSetup = vDSP_create_fftsetup(self.log_n, FFTRadix(kFFTRadix2))!
@@ -150,6 +159,7 @@ public class Listener: NSObject {
     public func stopListening() {
         //anything else to close down - AVAudio File
         audioEngine.stop()
+        currentSoundBuffers.removeAll()
         do {
           try audioSession.setActive(false)
            vDSP_destroy_fftsetup(fftSetup)
@@ -162,10 +172,10 @@ public class Listener: NSObject {
     }
     
     private func detectFrequency(buffer:AVAudioPCMBuffer) -> Bool {
-         return fft(soundClip: buffer)
+         return abs(Float(targetFrequncy)-fft(soundClip: buffer)) < Float(targetFrequncyThreshold)
     }
     
-    private func fft(soundClip:AVAudioPCMBuffer) -> Bool {
+    private func fft(soundClip:AVAudioPCMBuffer) -> Float {
         // create vectors
         var tempSplitComplexReal : [Float] = [Float](repeating: 0.0, count: n/2)
         var tempSplitComplexImag : [Float] = [Float](repeating: 0.0, count: n/2)
@@ -181,13 +191,13 @@ public class Listener: NSObject {
         let roots = fftMagnitudes.map {sqrtf($0)}
         var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
         //use reduce to iterate though once
-        print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
+        //print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
 //        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
 //        
 //        print(fullSpectrum)
         
         
-        return false
+        return Float(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
         
     }
     
