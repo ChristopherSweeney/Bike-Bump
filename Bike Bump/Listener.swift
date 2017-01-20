@@ -86,11 +86,8 @@ public class Listener: NSObject {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                 if(self.currentSoundBuffers.count < self.numBufferPerClip){
                     self.currentSoundBuffers.append(buffer)
-                    //print(self.currentSoundBuffers.count)
                 }
                 else {
-                    //print("here")
-                   // print(self.currentSoundBuffers.count)
                     self.currentSoundBuffers.remove(at: 0)
                     self.currentSoundBuffers.append(buffer)
                     if(self.detectFrequency(buffer: buffer)){
@@ -182,7 +179,6 @@ public class Listener: NSObject {
         var fftMagnitudes = [Float](repeating:0.0, count:Int(n2))
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, n2);
         let roots = fftMagnitudes.map {sqrtf($0)}
-       
         var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
         //use reduce to iterate though once
         print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))

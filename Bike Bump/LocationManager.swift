@@ -10,7 +10,8 @@ import UIKit
 import CoreLocation
 
 public class LocationManager: NSObject {
-        
+    let sharedLocationManager = LocationManager()
+    
     let location = CLLocationManager()
     
     override init() {
