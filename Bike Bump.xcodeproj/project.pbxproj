@@ -65,6 +65,7 @@
 		89F5E8C4CE16AD0472B91E80 /* Pods_Bike_BumpTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bike_BumpTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5BFE40DCBF8DEABD2AB7E37 /* Pods-Bike Bump.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike Bump.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump.debug.xcconfig"; sourceTree = "<group>"; };
 		AF70D63002D4258CBFC01B33 /* Pods-Bike Bump.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike Bump.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump.release.xcconfig"; sourceTree = "<group>"; };
+		BB020BC81E33F64B0038A03C /* Bike Bump.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bike Bump.entitlements"; sourceTree = "<group>"; };
 		BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BikeInProgressController.swift; sourceTree = "<group>"; };
 		BB42C83A1E273CD600BB4024 /* Bike Bump.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bike Bump.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB42C83D1E273CD600BB4024 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +157,7 @@
 		BB42C83C1E273CD600BB4024 /* Bike Bump */ = {
 			isa = PBXGroup;
 			children = (
+				BB020BC81E33F64B0038A03C /* Bike Bump.entitlements */,
 				BB42C83D1E273CD600BB4024 /* AppDelegate.swift */,
 				BB42C83F1E273CD600BB4024 /* AuthenticationController.swift */,
 				BB42C86F1E2BE90D00BB4024 /* Listener.swift */,
@@ -297,6 +299,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = CXHXL38L66;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					BB42C84D1E273CD600BB4024 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -659,6 +666,7 @@
 			baseConfigurationReference = A5BFE40DCBF8DEABD2AB7E37 /* Pods-Bike Bump.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Bike Bump/Bike Bump.entitlements";
 				DEVELOPMENT_TEAM = CXHXL38L66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -678,6 +686,7 @@
 			baseConfigurationReference = AF70D63002D4258CBFC01B33 /* Pods-Bike Bump.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Bike Bump/Bike Bump.entitlements";
 				DEVELOPMENT_TEAM = CXHXL38L66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

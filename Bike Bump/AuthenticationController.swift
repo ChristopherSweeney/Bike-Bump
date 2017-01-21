@@ -5,22 +5,31 @@
 //  Created by Chris Sweeney on 1/11/17.
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
-
+import FirebaseAuth
 import UIKit
 import AVFoundation
 import CoreLocation
 
 class AuthenticationController: UIViewController {
     //store crudentials locally
+    
     @IBOutlet weak var user: UITextField!
     //encrypt dots
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var loginButton: UIButton!
-    
+    @IBOutlet weak var signUp: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loginButton.addTarget(self, action: #selector(self.login), for:  UIControlEvents.touchUpInside)
+        signUp.addTarget(self, action: #selector(self.createUser), for:  UIControlEvents.touchUpInside)
+
+        //callback to see if logged in
+        FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
+            if user != nil {
+                self.performSegue(withIdentifier: "main", sender: nil)
+            }
+        }
     }
 
    override func didReceiveMemoryWarning() {
@@ -29,8 +38,19 @@ class AuthenticationController: UIViewController {
     }
 
     func login() {
-        let storyboard = self.storyboard
-        let controller = storyboard?.instantiateViewController(withIdentifier: "BikeInProgressController")
-        self.present(controller!, animated: true, completion: nil)    }
+        FIRAuth.auth()!.signIn(withEmail: user.text!,
+                               password:  password.text!)
+    }
+    
+    func createUser() {
+        FIRAuth.auth()!.createUser(withEmail: self.user.text!,
+                                   password: self.password.text!) { user, error in
+                                    if error == nil {
+                                        FIRAuth.auth()!.signIn(withEmail: self.user.text!,
+                                                               password: self.password.text!)
+                                    }
+                        }
+    }
 }
+
 

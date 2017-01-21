@@ -121,10 +121,12 @@ public class Listener: NSObject {
             self.currentSoundBuffers.append(buffer)
             if(self.detectFrequency(buffer: buffer)){
                 print("detected")
+                
                 DispatchQueue.main.async() {
                     self.delegate?.ringDetected()
                 }
                 do {
+                    LocationManager.share
                     let fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())
                     var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
                     for buffer in self.currentSoundBuffers {
@@ -135,7 +137,7 @@ public class Listener: NSObject {
                     self.currentSoundBuffers.removeAll()
                     //                              file = nil
                     DispatchQueue.global(qos: .background).async {
-                        print("sending to server")
+                        NetworkManager.sendToServer(path:fileName)
                     }
                 }
                 catch{

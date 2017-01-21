@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 //TODO add bike bell detetion call back
 class BikeInProgressController: UIViewController, AudioEvents {
     
     //state
     var isRideInProgress:Bool = false
+    var user:String = ""
     
     //UI elements
     @IBOutlet weak var inProgressDescription: UITextField!
@@ -26,7 +28,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("here")
         //setup audio processing graph
         listener.initializeAudio()
         listener.delegate = self
@@ -38,6 +40,11 @@ class BikeInProgressController: UIViewController, AudioEvents {
         endRide.layer.cornerRadius = 10
         startRide.addTarget(self, action: #selector(self.start), for:  UIControlEvents.touchUpInside)
         endRide.addTarget(self, action: #selector(self.end), for:  UIControlEvents.touchUpInside)
+        
+//        FIRAuth.auth()!.addStateDidChangeListener { auth, user in
+//            self.user = (user?.displayName)!
+//            
+//        }
         
     }
     
