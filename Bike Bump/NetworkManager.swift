@@ -20,6 +20,8 @@ public class NetworkManager: NSObject {
     
     //return type clousure to signal successs
     func sendToServer(file: AVAudioFile) -> Bool {
+//        let storageRef = storage.reference()
         return true
-    }
+    
+}
 }

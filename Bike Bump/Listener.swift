@@ -11,10 +11,17 @@ import UIKit
 import AVFoundation
 import Accelerate
 
+protocol AudioEvents:class {
+    func ringDetected()
+}
+
 /* The Listener object buffers mic input and sends a sound clip if a central frequency is heard at a certain frequency */
 
 public class Listener: NSObject {
     
+    //UI delegate
+    weak var delegate:AudioEvents?
+
     //timestamp format
     let formatter = DateFormatter()
 
@@ -114,6 +121,9 @@ public class Listener: NSObject {
             self.currentSoundBuffers.append(buffer)
             if(self.detectFrequency(buffer: buffer)){
                 print("detected")
+                DispatchQueue.main.async() {
+                    self.delegate?.ringDetected()
+                }
                 do {
                     let fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())
                     var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())

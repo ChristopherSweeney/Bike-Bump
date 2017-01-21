@@ -9,7 +9,7 @@
 import UIKit
 
 //TODO add bike bell detetion call back
-class BikeInProgressController: UIViewController {
+class BikeInProgressController: UIViewController, AudioEvents {
     
     //state
     var isRideInProgress:Bool = false
@@ -29,6 +29,7 @@ class BikeInProgressController: UIViewController {
         
         //setup audio processing graph
         listener.initializeAudio()
+        listener.delegate = self
         
         //setup UI
         isRideInProgress = false
@@ -65,4 +66,17 @@ class BikeInProgressController: UIViewController {
 
 
     }
+    
+    //delegate methods
+    func ringDetected() {
+        self.inProgressDescription.backgroundColor = UIColor.blue
+        
+        let fadeTime = DispatchTime.now() + .seconds(1)
+        DispatchQueue.main.asyncAfter(deadline: fadeTime) {
+            print("test")
+            self.inProgressDescription.backgroundColor = UIColor.white
+
+        }
+    }
+
 }

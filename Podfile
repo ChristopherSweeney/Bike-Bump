@@ -7,7 +7,7 @@ target 'Bike Bump' do
   use_frameworks!
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
-
+  pod 'FirebaseUI', '~> 1.0' 
 
   target 'Bike BumpTests' do
     inherit! :search_paths
