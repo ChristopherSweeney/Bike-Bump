@@ -94,13 +94,10 @@ public class Listener: NSObject {
             self.audioEngine.connect(inputNode, to:self.filter , format: self.filter.inputFormat(forBus: 0))
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                self.len += 1
-                print(self.len)
                 //control access to global varibles via serial queue
                 self.soundQueue.sync {
                     self.audioProcessingBlock(buffer: buffer)
                 }
-                self.len = self.len-1
             }
         }
         //cancel recording if any problems
@@ -120,14 +117,15 @@ public class Listener: NSObject {
             self.currentSoundBuffers.remove(at: 0)
             self.currentSoundBuffers.append(buffer)
             if(self.detectFrequency(buffer: buffer)){
-                print("detected")
-                
                 DispatchQueue.main.async() {
                     self.delegate?.ringDetected()
                 }
                 do {
-                    LocationManager.share
-                    let fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())
+                    let lat:Double = sharedLocationManager.getLocation().coordinate.latitude
+                    let long:Double = sharedLocationManager.getLocation().coordinate.latitude
+
+                    var fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())+".wav" //+ "_lat=\(lat)_long=\(long).wav"
+                    print(fileName)
                     var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
                     for buffer in self.currentSoundBuffers {
                         //remeber to delete file after sending
@@ -203,7 +201,7 @@ public class Listener: NSObject {
         let roots = fftMagnitudes.map {sqrtf($0)}
         var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
         //use reduce to iterate though once
-        //print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
+        print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
 //        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
 //        
 //        print(fullSpectrum)

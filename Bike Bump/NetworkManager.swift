@@ -24,18 +24,17 @@ public class NetworkManager: NSObject {
     
     //firebase
     static func sendToServer(path: String) -> Bool {
+        
         let storage = FIRStorage.storage().reference()
-        // File located on disk
         let localFile = URL(string: path)!
         
-        // Create a reference to the file you want to upload
-        let soundRef = storage.child("soundClips/"+path.las)
+        let soundRef = storage.child("soundClips/"+localFile.lastPathComponent)
         
-        // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = riversRef.putFile(localFile, metadata: nil) { metadata, error in
+        let uploadTask = soundRef.putFile(localFile, metadata: nil) { metadata, error in
             if let error = error {
-                // Uh-oh, an error occurred!
-            } else {
+                print("error")
+            }
+            else {
                 // Metadata contains file metadata such as size, content-type, and download URL.
                 let downloadURL = metadata!.downloadURL()
             }
