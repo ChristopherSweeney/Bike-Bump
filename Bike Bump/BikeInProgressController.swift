@@ -23,7 +23,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     @IBOutlet weak var startRide: UIButton!
     
     //moniters
-    let listener = Listener(samplingRate: 44100,soundClipDuration: 5,targetFrequncy: 3000,targetFrequncyThreshold: 400, bufferLength: 8192, lowPassFreq: 4000)
+    let listener = Listener(samplingRate: 44100,soundClipDuration: 5,targetFrequncy: 3000,targetFrequncyThreshold: 1000, bufferLength: 8192, lowPassFreq: 4000)
     let localizer = LocationManager()
     
     override func viewDidLoad() {

@@ -23,14 +23,13 @@ public class NetworkManager: NSObject {
     }
     
     //firebase
-    static func sendToServer(path: String) -> Bool {
+    static func sendToServer(path: URL) -> Bool {
         
         let storage = FIRStorage.storage().reference()
-        let localFile = URL(string: path)!
         
-        let soundRef = storage.child("soundClips/"+localFile.lastPathComponent)
+        let soundRef = storage.child("soundClips/" + path.lastPathComponent)
         
-        let uploadTask = soundRef.putFile(localFile, metadata: nil) { metadata, error in
+        let uploadTask = soundRef.putFile(path, metadata: nil) { metadata, error in
             if let error = error {
                 print("error")
             }

@@ -75,7 +75,7 @@ public class Listener: NSObject {
         self.soundClipDuration = soundClipDuration
         self.currentSoundBuffers = []
         self.numBufferPerClip = Int(soundClipDuration*samplingRate/Double(bufferLength))
-        formatter.dateFormat = "dd.MM.yyyy.mm.ss"
+        formatter.dateFormat = "dd-MM-yyyy-mm-ss"
         
 
     }
@@ -123,10 +123,9 @@ public class Listener: NSObject {
                 do {
                     let lat:Double = sharedLocationManager.getLocation().coordinate.latitude
                     let long:Double = sharedLocationManager.getLocation().coordinate.latitude
-
-                    var fileName:String = NSTemporaryDirectory() + "Audio_Sample_" + self.formatter.string(from: Date())+".wav" //+ "_lat=\(lat)_long=\(long).wav"
-                    print(fileName)
-                    var file:AVAudioFile = try AVAudioFile(forWriting:URL(string: fileName)!, settings: self.audioFileSettings())
+                    let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    var fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + self.formatter.string(from: Date()) + "_lat=\(lat)_long=\(long).wav"))
+                    var file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
                     for buffer in self.currentSoundBuffers {
                         //remeber to delete file after sending
                         try file.write(from: buffer)
@@ -135,7 +134,7 @@ public class Listener: NSObject {
                     self.currentSoundBuffers.removeAll()
                     //                              file = nil
                     DispatchQueue.global(qos: .background).async {
-                        NetworkManager.sendToServer(path:fileName)
+                        NetworkManager.sendToServer(path:fileURL)
                     }
                 }
                 catch{
@@ -190,7 +189,7 @@ public class Listener: NSObject {
         var tempSplitComplexReal : [Float] = [Float](repeating: 0.0, count: n/2)
         var tempSplitComplexImag : [Float] = [Float](repeating: 0.0, count: n/2)
         var tempSplitComplex : DSPSplitComplex = DSPSplitComplex(realp: &tempSplitComplexReal, imagp: &tempSplitComplexImag)
-        var splitComplex : DSPSplitComplex = DSPSplitComplex(realp: soundClip.floatChannelData![1], imagp: &tempSplitComplexImag)
+        var splitComplex : DSPSplitComplex = DSPSplitComplex(realp: soundClip.floatChannelData![0], imagp: &tempSplitComplexImag)
         
         // FFT
         vDSP_fft_zript(fftSetup!, &splitComplex, vDSP_Stride(1), &tempSplitComplex, log_n, FFTDirection(FFT_FORWARD));
