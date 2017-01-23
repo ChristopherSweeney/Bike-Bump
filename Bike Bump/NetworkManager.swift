@@ -34,13 +34,18 @@ public class NetworkManager: NSObject {
                 print("error")
             }
             else {
+                do {
+                    try FileManager.default.removeItem(at: path)
+                }
+                catch {
+                    print("couldnt delete file")
+                }
                 // Metadata contains file metadata such as size, content-type, and download URL.
                 let downloadURL = metadata!.downloadURL()
             }
         }
         return true
-        
-
+    
     
 }
     func getEndpointForCoordinates(lat:Float, long:Float) -> String {

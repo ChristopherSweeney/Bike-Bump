@@ -24,11 +24,10 @@ class BikeInProgressController: UIViewController, AudioEvents {
     
     //moniters
     let listener = Listener(samplingRate: 44100,soundClipDuration: 5,targetFrequncy: 3000,targetFrequncyThreshold: 1000, bufferLength: 8192, lowPassFreq: 4000)
-    let localizer = LocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("here")
+        
         //setup audio processing graph
         listener.initializeAudio()
         listener.delegate = self
