@@ -121,6 +121,8 @@ public class Listener: NSObject {
                     self.delegate?.ringDetected()
                 }
                 do {
+                    
+                    //put extraneous getters like time stam p and this somewhere else
                     let lat:Double = sharedLocationManager.getLocation().coordinate.latitude
                     let long:Double = sharedLocationManager.getLocation().coordinate.latitude
                     let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -144,6 +146,7 @@ public class Listener: NSObject {
             
         }
     }
+    
     private func setupFilter(){
          filter.bands[0].filterType = AVAudioUnitEQFilterType.lowPass
          filter.bands[0].frequency = Float(lowPassFreq);
