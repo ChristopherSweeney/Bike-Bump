@@ -28,6 +28,13 @@
 	<string>Bike Bump needs to access your location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Bike Bump is requesting access to use your microphone</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>fetch</string>
+		<string>location</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

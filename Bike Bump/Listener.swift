@@ -11,21 +11,19 @@ import UIKit
 import AVFoundation
 import Accelerate
 
+//callback protocol to update UI from audio events
 protocol AudioEvents:class {
     func ringDetected()
 }
 
-/* The Listener object buffers mic input and sends a sound clip if a central frequency is heard at a certain frequency */
+/* The Listener object buffers mic input and sends a sound clip if a central frequency is heard at a certain frequency post fft */
 
 public class Listener: NSObject {
     
     //UI delegate
     weak var delegate:AudioEvents?
 
-    //timestamp format
-    let formatter = DateFormatter()
-
-        //fft params
+    //fft params
     var n: NSInteger
     var n2:vDSP_Length
     var log_n:vDSP_Length
@@ -36,7 +34,6 @@ public class Listener: NSObject {
     var soundClipDuration:Double
     var numBufferPerClip:Int
     
-    
     //audio graph params
     var audioEngine:AVAudioEngine = AVAudioEngine()
     var audioSession = AVAudioSession.sharedInstance()
@@ -45,14 +42,13 @@ public class Listener: NSObject {
     var lowPassFreq:Int
     
     //microphone harware params
-    // let ioBufferDuration = 128.0 / 44100.0
     var samplingRate:Double //hz
     var targetFrequncy:Double //hz
     var targetFrequncyThreshold:Double //hz
     
+    //queue to control concurrency problems
     let soundQueue:DispatchQueue = DispatchQueue(label: "com.example.audiofftqueue")
 
-    var len = 0
     init(samplingRate:Double,
          soundClipDuration:Double,
          targetFrequncy:Double,
@@ -75,9 +71,6 @@ public class Listener: NSObject {
         self.soundClipDuration = soundClipDuration
         self.currentSoundBuffers = []
         self.numBufferPerClip = Int(soundClipDuration*samplingRate/Double(bufferLength))
-        formatter.dateFormat = "dd-MM-yyyy-mm-ss"
-        
-
     }
     
     public func initializeAudio() {
@@ -86,26 +79,24 @@ public class Listener: NSObject {
             try audioSession.setCategory(AVAudioSessionCategoryRecord)
             try audioSession.setPreferredSampleRate(self.samplingRate)
             try audioSession.setPreferredInputNumberOfChannels(1)
-            // try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
             try audioSession.setMode(AVAudioSessionModeMeasurement)
             self.setupFilter()
             self.audioEngine.attach(self.filter)
             //keep track of how to control audio processing format -changing sample rate
             self.audioEngine.connect(inputNode, to:self.filter , format: self.filter.inputFormat(forBus: 0))
+            
+            //listen for mic data- maybe do fiter post fft
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                //control access to global varibles via serial queue
-                self.soundQueue.sync {
-                    self.audioProcessingBlock(buffer: buffer)
-                }
+                    self.soundQueue.sync {
+                        self.audioProcessingBlock(buffer: buffer)
+                    }
             }
         }
         //cancel recording if any problems
         catch {
             print("something went wrong")
         }
-        
-    
     }
     
     func audioProcessingBlock(buffer: AVAudioPCMBuffer) {
@@ -117,33 +108,38 @@ public class Listener: NSObject {
             self.currentSoundBuffers.remove(at: 0)
             self.currentSoundBuffers.append(buffer)
             if(self.detectFrequency(buffer: buffer)){
+                //callback for UI
                 DispatchQueue.main.async() {
                     self.delegate?.ringDetected()
                 }
                 do {
+                    //get enviornment info
+                    let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
+                    let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
+                    let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
                     
-                    //put extraneous getters like time stam p and this somewhere else
-                    let lat:Double = sharedLocationManager.getLocation().coordinate.latitude
-                    let long:Double = sharedLocationManager.getLocation().coordinate.latitude
+                    //create wav file
                     let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                    var fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + self.formatter.string(from: Date()) + "_lat=\(lat)_long=\(long).wav"))
-                    var file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
+                    let fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"))
+                    let file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
+                    
+                    //merge buffers into files
                     for buffer in self.currentSoundBuffers {
-                        //remeber to delete file after sending
                         try file.write(from: buffer)
                     }
-                    //empty sound cache
+                    //flush sound cache
                     self.currentSoundBuffers.removeAll()
-                    //                              file = nil
+                    
+                    //send files to server
                     DispatchQueue.global(qos: .background).async {
                         NetworkManager.sendToServer(path:fileURL)
+                        NetworkManager.storeResults(lat:Float(lat), lng:Float(long), timeStamp:curTime)
                     }
                 }
                 catch{
                     print("could not create file")
                 }
             }
-            
         }
     }
     
@@ -153,7 +149,7 @@ public class Listener: NSObject {
     }
 
     public func startListening() {
-        //offload initianliztion so you can start and stop
+        //offload initialization so you can start and stop
         audioSession.requestRecordPermission({(permissionGranted: Bool) -> Void in
             if permissionGranted {
                 do {
@@ -169,25 +165,26 @@ public class Listener: NSObject {
     }
     
     public func stopListening() {
-        //anything else to close down - AVAudio File
         audioEngine.stop()
         currentSoundBuffers.removeAll()
         do {
           try audioSession.setActive(false)
            vDSP_destroy_fftsetup(fftSetup)
-
         }
         catch {
             print("could not end session")
         }
-        
+    }
+    
+    public func isListening() -> Bool {
+        return self.audioEngine.isRunning
     }
     
     private func detectFrequency(buffer:AVAudioPCMBuffer) -> Bool {
-         return abs(Float(targetFrequncy)-fft(soundClip: buffer)) < Float(targetFrequncyThreshold)
+         return abs(Float(targetFrequncy) - fftFundementalFreq(soundClip: buffer)) > Float(targetFrequncyThreshold)
     }
     
-    private func fft(soundClip:AVAudioPCMBuffer) -> Float {
+    private func fftFundementalFreq(soundClip:AVAudioPCMBuffer) -> Float {
         // create vectors
         var tempSplitComplexReal : [Float] = [Float](repeating: 0.0, count: n/2)
         var tempSplitComplexImag : [Float] = [Float](repeating: 0.0, count: n/2)
@@ -201,23 +198,19 @@ public class Listener: NSObject {
         var fftMagnitudes = [Float](repeating:0.0, count:Int(n2))
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, n2);
         let roots = fftMagnitudes.map {sqrtf($0)}
-        var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
-        //use reduce to iterate though once
         print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
+       
+        //normalize reults
 //        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
-//        
-//        print(fullSpectrum)
-        
-        
+//        var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
+
         return Float(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
-        
     }
     
     private func audioFileSettings() -> Dictionary<String, Any>
     {
-    
         return [
-            AVSampleRateKey : 44100.0,
+            AVSampleRateKey : samplingRate,
             AVNumberOfChannelsKey : 2,
             AVFormatIDKey : kAudioFormatLinearPCM
         ]
