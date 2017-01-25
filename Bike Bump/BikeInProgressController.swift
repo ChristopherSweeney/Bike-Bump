@@ -32,6 +32,12 @@ class BikeInProgressController: UIViewController, AudioEvents {
     override func viewDidLoad() {
         super.viewDidLoad()
         param = FIRRemoteConfig.remoteConfig()
+        param?.fetch(withExpirationDuration: 0) {
+            (status, error) in
+            
+        }
+        let fetched:Bool = param!.activateFetched()
+        print(fetched)
         //get server audio params
         //use guard let to assign default value
         let samplingRate:Int = param!.configValue(forKey: "samplingRate").numberValue as! Int

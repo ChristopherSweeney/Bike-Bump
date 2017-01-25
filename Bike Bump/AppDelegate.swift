@@ -5,6 +5,7 @@
 //  Created by Chris Sweeney on 1/11/17.
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
+import FirebaseRemoteConfig
 import Firebase
 import UIKit
 import AVFoundation

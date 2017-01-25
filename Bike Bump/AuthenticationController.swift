@@ -9,6 +9,8 @@ import FirebaseAuth
 import UIKit
 import AVFoundation
 import CoreLocation
+import FirebaseRemoteConfig
+
 
 class AuthenticationController: UIViewController {
     //store crudentials locally
