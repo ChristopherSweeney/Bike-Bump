@@ -42,17 +42,17 @@ public class Listener: NSObject {
     var lowPassFreq:Int
     
     //microphone harware params
-    var samplingRate:Double //hz
-    var targetFrequncy:Double //hz
-    var targetFrequncyThreshold:Double //hz
+    var samplingRate:Int //hz
+    var targetFrequncy:Int //hz
+    var targetFrequncyThreshold:Int //hz
     
     //queue to control concurrency problems
     let soundQueue:DispatchQueue = DispatchQueue(label: "com.example.audiofftqueue")
 
-    init(samplingRate:Double,
+    init(samplingRate:Int,
          soundClipDuration:Double,
-         targetFrequncy:Double,
-         targetFrequncyThreshold:Double,
+         targetFrequncy:Int,
+         targetFrequncyThreshold:Int,
          bufferLength:Int,
          lowPassFreq:Int) {
         
@@ -70,14 +70,14 @@ public class Listener: NSObject {
         
         self.soundClipDuration = soundClipDuration
         self.currentSoundBuffers = []
-        self.numBufferPerClip = Int(soundClipDuration*samplingRate/Double(bufferLength))
+        self.numBufferPerClip = Int(soundClipDuration*Double(samplingRate)/Double(bufferLength))
     }
     
     public func initializeAudio() {
         do {
             try audioSession.setActive(true)
             try audioSession.setCategory(AVAudioSessionCategoryRecord)
-            try audioSession.setPreferredSampleRate(self.samplingRate)
+            try audioSession.setPreferredSampleRate(Double(self.samplingRate))
             try audioSession.setPreferredInputNumberOfChannels(1)
             try audioSession.setMode(AVAudioSessionModeMeasurement)
             self.setupFilter()
@@ -113,7 +113,7 @@ public class Listener: NSObject {
                     self.delegate?.ringDetected()
                 }
                 do {
-                    //get enviornment info
+                    //get enviornment info - > maybe make location manager local
                     let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
                     let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
                     let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
@@ -133,7 +133,7 @@ public class Listener: NSObject {
                     //send files to server
                     DispatchQueue.global(qos: .background).async {
                         NetworkManager.sendToServer(path:fileURL)
-                        NetworkManager.storeResults(lat:Float(lat), lng:Float(long), timeStamp:curTime)
+//                        NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:curTime)
                     }
                 }
                 catch{
@@ -181,7 +181,7 @@ public class Listener: NSObject {
     }
     
     private func detectFrequency(buffer:AVAudioPCMBuffer) -> Bool {
-         return abs(Float(targetFrequncy) - fftFundementalFreq(soundClip: buffer)) > Float(targetFrequncyThreshold)
+         return abs(Float(targetFrequncy) - fftFundementalFreq(soundClip: buffer)) < Float(targetFrequncyThreshold)
     }
     
     private func fftFundementalFreq(soundClip:AVAudioPCMBuffer) -> Float {
@@ -217,7 +217,7 @@ public class Listener: NSObject {
     }
     
     private func indexToFrequency(N:Int, index:Int) -> Double {
-        return Double(index)*self.samplingRate/Double(N)
+        return Double(index)*Double(self.samplingRate)/Double(N)
     }
     
 }

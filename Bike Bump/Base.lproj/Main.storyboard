@@ -18,7 +18,7 @@
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="Authentic">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -77,13 +77,13 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Bike Bump" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bl7-V4-34h">
-                                <rect key="frame" x="90" y="74" width="200" height="115"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Bike Bump" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bl7-V4-34h">
+                                <rect key="frame" x="85.856347438751982" y="74" width="200" height="115.00000000000001"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="115" id="ceC-oP-hvn"/>
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="GurmukhiMN" family="Gurmukhi MN" pointSize="39"/>
+                                <fontDescription key="fontDescription" name="GurmukhiMN" family="Gurmukhi MN" pointSize="50"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
@@ -92,7 +92,6 @@
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="leading" secondItem="lbx-Fu-qS4" secondAttribute="leading" id="8NP-hP-UOh"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="trailing" secondItem="TJf-1z-bs6" secondAttribute="trailing" id="CGV-fM-mI4"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="leading" secondItem="nE4-nw-Xkf" secondAttribute="leading" id="CoU-ch-bFa"/>
-                            <constraint firstItem="bl7-V4-34h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="74" id="FAD-bf-YWC"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="leading" secondItem="TJf-1z-bs6" secondAttribute="leading" id="Q4H-0G-BEk"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yzj-5L-rji"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="trailing" secondItem="lbx-Fu-qS4" secondAttribute="trailing" id="bhE-vq-AWJ"/>

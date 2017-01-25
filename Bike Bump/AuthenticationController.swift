@@ -23,7 +23,9 @@ class AuthenticationController: UIViewController {
         super.viewDidLoad()
         loginButton.addTarget(self, action: #selector(self.login), for:  UIControlEvents.touchUpInside)
         signUp.addTarget(self, action: #selector(self.createUser), for:  UIControlEvents.touchUpInside)
-
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         //callback to see if logged in
         FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
             if user != nil {

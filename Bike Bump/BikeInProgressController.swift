@@ -6,6 +6,7 @@
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
 
+import FirebaseRemoteConfig
 import UIKit
 import FirebaseAuth
 
@@ -22,15 +23,30 @@ class BikeInProgressController: UIViewController, AudioEvents {
     @IBOutlet weak var endRide: UIButton!
     @IBOutlet weak var startRide: UIButton!
     
+    //firebase
+    var param:FIRRemoteConfig?
+    
     //moniter
-    let listener = Listener(samplingRate: 44100, soundClipDuration: 5,targetFrequncy: 3000,targetFrequncyThreshold: 1000, bufferLength: 8192, lowPassFreq: 4000)
+    var listener:Listener?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        param = FIRRemoteConfig.remoteConfig()
+        //get server audio params
+        //use guard let to assign default value
+        let samplingRate:Int = param!.configValue(forKey: "samplingRate").numberValue as! Int
+        let soundClipDuration:Int = param!.configValue(forKey: "soundClipDuration").numberValue as! Int
+        let targetFreq:Int = param!.configValue(forKey: "bellTargetFreq").numberValue as! Int
+        let lowPassFreq:Int = param!.configValue(forKey: "bellTargetFreq").numberValue as! Int
+        let bufferLength:Int = param!.configValue(forKey: "fftListenLength").numberValue as! Int
+        print(samplingRate)
+        print("here")
+
+         self.listener = Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: 1000, bufferLength: bufferLength, lowPassFreq: lowPassFreq)
         
         //setup audio processing graph
-        listener.initializeAudio()
-        listener.delegate = self
+        listener?.initializeAudio()
+        listener?.delegate = self
         
         //setup UI
         isRideInProgress = false
@@ -54,7 +70,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     
     //one function with toggling state
     func start() {
-        listener.startListening()
+        listener?.startListening()
         rideInProgress.isHidden = false
         rideInProgress.startAnimating()
         startRide.isEnabled = false
@@ -63,7 +79,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     }
     
     func end() {
-        listener.stopListening()
+        listener?.stopListening()
         rideInProgress.isHidden = true
         rideInProgress.stopAnimating()
         startRide.isEnabled = true

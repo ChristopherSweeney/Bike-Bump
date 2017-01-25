@@ -7,14 +7,13 @@
 //
 import FirebaseCore
 import FirebaseDatabase
+import FirebaseAuth
 import UIKit
 import AVFoundation
 import FirebaseStorage
 
 let roadInfo = "api/road/ROADID"
 let baseURL = "https://bikebump.media.mit.edu/"
-
-
 
 public class NetworkManager {
 
@@ -41,27 +40,51 @@ public class NetworkManager {
             }
         }    
     }
+    
      private static func getEndpointForCoordinates(lat:Float, lng:Float) -> String {
         return baseURL + "api/road/closest?lng=" + String(lng) + "&lat=-" + String(lat)
 
     }
     
     //user name?
-   static func storeResults(lat:Float, lng:Float, timeStamp:String) {
-        let url:String = NetworkManager.getEndpointForCoordinates(lat: lat, lng: lng)
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "GET"
+//   static func getParams(lat:Float, lng:Float, timeStamp:String) {
+//        let url:String = NetworkManager.getEndpointForCoordinates(lat: lat, lng: lng)
+//        var request = URLRequest(url: URL(string: url)!)
+//        request.httpMethod = "GET"
+//        //is this initialzed everytime?
+//        let session = URLSession.shared
+//        session.dataTask(with: request) {data, response, err in
+//            print("storing user data results to Firebase")
+//            FIRDatabase.database().reference().child("dings").updateChildValues(["test2":234])
+//
+//
+//            let httpResponse = response as! HTTPURLResponse
+//            let statusCode = httpResponse.statusCode
+//            print(httpResponse.description)
+//            }.resume()
+//
+//    }
+    
+    static func sendDing(lat:Float, lng:Float, timeStamp:String) {
+        
+        //should have user authenticated
+        let user = FIRAuth.auth()?.currentUser
+        let uid = user?.uid
+        let data:Data = NSKeyedArchiver.archivedData(withRootObject: ["lat":lat,"long":lng,"timestamp":timeStamp,"uid":uid!])
+
+        var request = URLRequest(url: URL(string: baseURL)!)
+        request.httpMethod = "PUT"
+        request.httpBody = data
+        
         //is this initialzed everytime?
         let session = URLSession.shared
         session.dataTask(with: request) {data, response, err in
             print("storing user data results to Firebase")
-            FIRDatabase.database().reference().child("dings").updateChildValues(["test2":234])
-
-
             let httpResponse = response as! HTTPURLResponse
             let statusCode = httpResponse.statusCode
-            print(httpResponse.description)
+            print(statusCode)
             }.resume()
-
+        
     }
+
 }

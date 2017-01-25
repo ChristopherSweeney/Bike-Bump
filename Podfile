@@ -8,6 +8,8 @@ target 'Bike Bump' do
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'FirebaseUI', '~> 1.0' 
+  pod 'Firebase/RemoteConfig'
+
 
   target 'Bike BumpTests' do
     inherit! :search_paths
