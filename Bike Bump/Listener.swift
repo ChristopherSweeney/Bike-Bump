@@ -85,7 +85,7 @@ public class Listener: NSObject {
             //keep track of how to control audio processing format -changing sample rate
             self.audioEngine.connect(inputNode, to:self.filter , format: self.filter.inputFormat(forBus: 0))
             
-            //listen for mic data- maybe do fiter post fft
+            //listen for mic data - maybe do fiter post fft
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                     self.soundQueue.sync {
@@ -185,24 +185,29 @@ public class Listener: NSObject {
     }
     
     private func fftFundementalFreq(soundClip:AVAudioPCMBuffer) -> Float {
+        
         // create vectors
-        var tempSplitComplexReal : [Float] = [Float](repeating: 0.0, count: n/2)
-        var tempSplitComplexImag : [Float] = [Float](repeating: 0.0, count: n/2)
-        var tempSplitComplex : DSPSplitComplex = DSPSplitComplex(realp: &tempSplitComplexReal, imagp: &tempSplitComplexImag)
-        var splitComplex : DSPSplitComplex = DSPSplitComplex(realp: soundClip.floatChannelData![0], imagp: &tempSplitComplexImag)
+        var tempReal : [Float] = [Float](repeating: 0.0, count: n)
+        var tempImag : [Float] = [Float](repeating: 0.0, count: n)
+        var tempSplitComplex : DSPSplitComplex = DSPSplitComplex(realp: &tempReal, imagp: &tempImag)
+        var splitComplex : DSPSplitComplex = DSPSplitComplex(realp: soundClip.floatChannelData![0], imagp: &tempImag)
         
         // FFT
         vDSP_fft_zript(fftSetup!, &splitComplex, vDSP_Stride(1), &tempSplitComplex, log_n, FFTDirection(FFT_FORWARD));
         
-       //analyze results
-        var fftMagnitudes = [Float](repeating:0.0, count:Int(n2))
-        vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, n2);
-        let roots = fftMagnitudes.map {sqrtf($0)}
-        print(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
+       //package results
+        var fftMagnitudes = [Float](repeating:0.0, count:Int(n))
+        vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
+        var roots = fftMagnitudes.map {sqrtf($0)}
+        let maxIndex:Int = roots.index(of: roots.max()!)!
+        print(indexToFrequency(N: n, index: maxIndex))
        
         //normalize reults
 //        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
 //        var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
+        
+        calculateSlope(index: maxIndex, width: 10, array: &roots)
+        calculateSlope(index: maxIndex, width: -10, array: &roots)
 
         return Float(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
     }
@@ -219,5 +224,14 @@ public class Listener: NSObject {
     private func indexToFrequency(N:Int, index:Int) -> Double {
         return Double(index)*Double(self.samplingRate)/Double(N)
     }
+    
+    private func calculateSlope(index:Int, width:Int, array:inout [Float]) -> Float {
+        var sum:Float = 0
+        for i in index...index+width{
+            sum += array[i]
+        }
+        return sum/Float(width)
+    }
+    
     
 }

@@ -104,7 +104,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     
     //delegate methods
     func ringDetected() {
-        self.inProgressDescription.backgroundColor = UIColor.blue
+        self.inProgressDescription.backgroundColor = UIColor.yellow
         
         let fadeTime = DispatchTime.now() + .seconds(1)
         DispatchQueue.main.asyncAfter(deadline: fadeTime) {

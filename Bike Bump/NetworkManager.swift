@@ -12,7 +12,7 @@ import UIKit
 import AVFoundation
 import FirebaseStorage
 
-let roadInfo = "api/road/ROADID"
+let roadInfo = "api/dings/add"
 let baseURL = "https://bikebump.media.mit.edu/"
 
 public class NetworkManager {
