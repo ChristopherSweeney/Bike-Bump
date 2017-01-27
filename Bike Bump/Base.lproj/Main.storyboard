@@ -77,8 +77,8 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Bike Bump" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bl7-V4-34h">
-                                <rect key="frame" x="85.856347438751982" y="74" width="200" height="115.00000000000001"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Bike Bump" textAlignment="center" minimumFontSize="38" translatesAutoresizingMaskIntoConstraints="NO" id="bl7-V4-34h">
+                                <rect key="frame" x="59" y="74" width="256" height="115"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="115" id="ceC-oP-hvn"/>
                                 </constraints>
@@ -87,7 +87,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" red="0.19753553107365263" green="0.35499234049427375" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="leading" secondItem="lbx-Fu-qS4" secondAttribute="leading" id="8NP-hP-UOh"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="trailing" secondItem="TJf-1z-bs6" secondAttribute="trailing" id="CGV-fM-mI4"/>
@@ -95,6 +95,7 @@
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="leading" secondItem="TJf-1z-bs6" secondAttribute="leading" id="Q4H-0G-BEk"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yzj-5L-rji"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="trailing" secondItem="lbx-Fu-qS4" secondAttribute="trailing" id="bhE-vq-AWJ"/>
+                            <constraint firstItem="bl7-V4-34h" firstAttribute="centerX" secondItem="lbx-Fu-qS4" secondAttribute="centerX" id="eZQ-N8-jAj"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="top" secondItem="nE4-nw-Xkf" secondAttribute="bottom" constant="41" id="gZX-Jv-EQw"/>
                             <constraint firstItem="VK4-9k-cYA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="54" id="hZ0-bJ-UHG"/>
                             <constraint firstItem="bl7-V4-34h" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="54" id="i6X-hv-76C"/>
@@ -152,30 +153,40 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
-                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ride in Progress" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UX8-wb-qXa">
-                                <rect key="frame" x="120" y="417" width="135" height="30"/>
+                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ride in Progress" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UX8-wb-qXa">
+                                <rect key="frame" x="118.5" y="417" width="135" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Noteworthy-Light" family="Noteworthy" pointSize="39"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="JmO-hY-egn">
                                 <rect key="frame" x="177" y="335" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Welcome" textAlignment="center" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="X0l-5i-xhD">
+                                <rect key="frame" x="59.928406466512683" y="66.999999999999886" width="255" height="29.999999999999986"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Noteworthy-Light" family="Noteworthy" pointSize="27"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
                         <outlet property="endRide" destination="lpb-Tq-4nM" id="vFh-xr-m2j"/>
                         <outlet property="inProgressDescription" destination="UX8-wb-qXa" id="UqV-Qa-MAY"/>
                         <outlet property="rideInProgress" destination="JmO-hY-egn" id="dcY-Xt-pum"/>
                         <outlet property="startRide" destination="3OU-wb-D9E" id="j8k-xO-KFq"/>
+                        <outlet property="welcomeField" destination="X0l-5i-xhD" id="FiE-hy-r0K"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eFc-1i-SBt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="898" y="139"/>
+            <point key="canvasLocation" x="896.79999999999995" y="138.98050974512745"/>
         </scene>
     </scenes>
 </document>
