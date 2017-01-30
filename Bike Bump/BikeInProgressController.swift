@@ -72,7 +72,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
         
         //setup UI
         isRideInProgress = false
-        rideButton.frame = CGRect(x: self.view.bounds.width/2.0, y: self.view.bounds.height/2.0, width: 300, height: 300)
+        rideButton.frame = CGRect(x: UIScreen.main.bounds.width/2.0, y: UIScreen.main.bounds.height/2.0, width: 300, height: 300)
         rideButton.layer.cornerRadius = rideButton.bounds.size.width * 0.5
         rideButton.addTarget(self, action: #selector(self.rideAction), for:  UIControlEvents.touchUpInside)
     }

@@ -12,7 +12,7 @@ import UIKit
 import AVFoundation
 import FirebaseStorage
 
-let roadInfo = "api/dings/add"
+let roadInfo = "api/dings/add?"
 let baseURL = "https://bikebump.media.mit.edu/"
 
 public class NetworkManager {
@@ -70,11 +70,12 @@ public class NetworkManager {
         //should have user authenticated
         let user = FIRAuth.auth()?.currentUser
         let uid = user?.uid
-        let data:Data = NSKeyedArchiver.archivedData(withRootObject: ["lat":lat,"long":lng,"timestamp":timeStamp,"uid":uid!])
-
-        var request = URLRequest(url: URL(string: baseURL)!)
+        let params:[URLQueryItem] = ["lat":lat,"long":lng,"timestamp":timeStamp,"uid":uid!].map {(key, value) in (URLQueryItem(name: key, value: String(describing: value)))}
+        var url = URLComponents(string: baseURL)!
+        url.queryItems = params
+        let query = url.url
+        var request = URLRequest(url: query!)
         request.httpMethod = "PUT"
-        request.httpBody = data
         
         //is this initialzed everytime?
         let session = URLSession.shared
