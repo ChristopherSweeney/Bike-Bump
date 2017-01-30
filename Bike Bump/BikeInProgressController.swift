@@ -72,9 +72,12 @@ class BikeInProgressController: UIViewController, AudioEvents {
         
         //setup UI
         isRideInProgress = false
-        rideButton.frame = CGRect(x: UIScreen.main.bounds.width/2.0, y: UIScreen.main.bounds.height/2.0, width: 300, height: 300)
+        rideButton.frame = CGRect(x: rideButton.frame.origin.x/2, y: rideButton.frame.origin.y, width: 300, height: 300)
         rideButton.layer.cornerRadius = rideButton.bounds.size.width * 0.5
         rideButton.addTarget(self, action: #selector(self.rideAction), for:  UIControlEvents.touchUpInside)
+         rideButton.addTarget(self, action: #selector(self.didTouch), for:  UIControlEvents.touchDown)
+        rideButton.addTarget(self, action: #selector(self.didLift), for:  UIControlEvents.touchUpInside)
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -103,6 +106,20 @@ class BikeInProgressController: UIViewController, AudioEvents {
             rideInProgress.startAnimating()
             inProgressDescription.isHidden = false
         }
+    }
+    
+    func didTouch()  {
+        UIView.animate(withDuration: 0.2,
+                      animations: {
+                        self.rideButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+            })
+    }
+    
+    func didLift() {
+        UIView.animate(withDuration: 0.2,
+                       animations: {
+                        self.rideButton.transform = CGAffineTransform.identity
+        })
     }
     
     //delegate methods for UI triggers
