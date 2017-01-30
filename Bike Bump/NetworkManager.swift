@@ -71,7 +71,9 @@ public class NetworkManager {
         let user = FIRAuth.auth()?.currentUser
         let uid = user?.uid
         let params:[URLQueryItem] = ["lat":lat,"long":lng,"timestamp":timeStamp,"uid":uid!].map {(key, value) in (URLQueryItem(name: key, value: String(describing: value)))}
+        
         var url = URLComponents(string: baseURL)!
+        print(url)
         url.queryItems = params
         let query = url.url
         var request = URLRequest(url: query!)

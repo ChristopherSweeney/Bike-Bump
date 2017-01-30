@@ -217,7 +217,7 @@ public class Listener: NSObject {
     {
         return [
             AVSampleRateKey : samplingRate,
-            AVNumberOfChannelsKey : 2,
+            AVNumberOfChannelsKey : 1,
             AVFormatIDKey : kAudioFormatLinearPCM
         ]
     }

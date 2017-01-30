@@ -41,7 +41,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bell no background" translatesAutoresizingMaskIntoConstraints="NO" id="WR9-bZ-BmJ">
-                                <rect key="frame" x="92" y="284" width="240" height="257"/>
+                                <rect key="frame" x="90" y="289" width="212" height="226"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
