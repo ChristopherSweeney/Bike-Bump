@@ -19,9 +19,8 @@ class BikeInProgressController: UIViewController, AudioEvents {
     //UI elements
     @IBOutlet weak var inProgressDescription: UITextField!
     @IBOutlet weak var rideInProgress: UIActivityIndicatorView!
-    @IBOutlet weak var endRide: UIButton!
-    @IBOutlet weak var startRide: UIButton!
     @IBOutlet weak var welcomeField: UITextField!
+    @IBOutlet weak var rideButton: UIButton!
     
     //firebase
     var param:FIRRemoteConfig?
@@ -47,7 +46,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
         }
         var soundClipDuration:Int = param!.configValue(forKey: "soundClipDuration").numberValue as! Int
         if soundClipDuration <= 0 {
-            soundClipDuration = 44100
+            soundClipDuration = 5
         }
         var targetFreq:Int = param!.configValue(forKey: "bellTargetFreq").numberValue as! Int
         if targetFreq <= 0 {
@@ -67,15 +66,15 @@ class BikeInProgressController: UIViewController, AudioEvents {
         
         //setup audio processing graph
         listener?.initializeAudio()
+        
+        //setup outlit for callback to UI from listener class
         listener?.delegate = self
         
         //setup UI
         isRideInProgress = false
-        endRide.isEnabled = false
-        startRide.layer.cornerRadius = 10
-        endRide.layer.cornerRadius = 10
-        startRide.addTarget(self, action: #selector(self.start), for:  UIControlEvents.touchUpInside)
-        endRide.addTarget(self, action: #selector(self.end), for:  UIControlEvents.touchUpInside)
+        rideButton.frame = CGRect(x: self.view.bounds.width/2.0, y: self.view.bounds.height/2.0, width: 300, height: 300)
+        rideButton.layer.cornerRadius = rideButton.bounds.size.width * 0.5
+        rideButton.addTarget(self, action: #selector(self.rideAction), for:  UIControlEvents.touchUpInside)
     }
     
     override func didReceiveMemoryWarning() {
@@ -83,34 +82,36 @@ class BikeInProgressController: UIViewController, AudioEvents {
         // Dispose of any resources that can be recreated.
     }
     
-    //one function with toggling state
-    func start() {
-        listener?.startListening()
-        rideInProgress.isHidden = false
-        rideInProgress.startAnimating()
-        startRide.isEnabled = false
-        endRide.isEnabled = true
-        inProgressDescription.isHidden = false
-    }
-    
-    func end() {
-        listener?.stopListening()
-        rideInProgress.isHidden = true
-        rideInProgress.stopAnimating()
-        startRide.isEnabled = true
-        endRide.isEnabled = false
-        inProgressDescription.isHidden = true
-    }
-    
-    //delegate methods
-    func ringDetected() {
-        self.inProgressDescription.backgroundColor = UIColor.yellow
+    func rideAction() {
         
+        if isRideInProgress {
+            isRideInProgress = false
+            listener?.stopListening()
+            rideButton.setTitle("Start Ride", for: UIControlState.normal)
+            rideButton.backgroundColor = UIColor.green
+            rideInProgress.isHidden = true
+            rideInProgress.stopAnimating()
+            inProgressDescription.isHidden = true
+            isRideInProgress = false
+        }
+        else {
+            isRideInProgress = true
+            listener?.startListening()
+            rideButton.setTitle("End Ride", for: UIControlState.normal)
+            rideButton.backgroundColor = UIColor.red
+            rideInProgress.isHidden = false
+            rideInProgress.startAnimating()
+            inProgressDescription.isHidden = false
+        }
+    }
+    
+    //delegate methods for UI triggers
+    
+    func ringDetected() {
+        self.rideButton.backgroundColor = UIColor.yellow
         let fadeTime = DispatchTime.now() + .seconds(1)
         DispatchQueue.main.asyncAfter(deadline: fadeTime) {
-            print("test")
-            self.inProgressDescription.backgroundColor = UIColor.white
-
+            self.rideButton.backgroundColor = UIColor.red
         }
     }
 

@@ -82,8 +82,9 @@ public class Listener: NSObject {
             try audioSession.setMode(AVAudioSessionModeMeasurement)
             self.setupFilter()
             self.audioEngine.attach(self.filter)
+            
             //keep track of how to control audio processing format -changing sample rate
-            self.audioEngine.connect(inputNode, to:self.filter , format: self.filter.inputFormat(forBus: 0))
+            self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
             
             //listen for mic data - maybe do fiter post fft
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
@@ -200,14 +201,14 @@ public class Listener: NSObject {
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
         var roots = fftMagnitudes.map {sqrtf($0)}
         let maxIndex:Int = roots.index(of: roots.max()!)!
-        print(indexToFrequency(N: n, index: maxIndex))
+//        print(indexToFrequency(N: n, index: maxIndex))
        
         //normalize reults
-//        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, n2)
-//        var fullSpectrum = [Float](repeating:0.0, count:Int(n2))
+//        var fullSpectrum = [Float](repeating:0.0, count:Int(n))
+//        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, vDSP_Length(n))
         
-        calculateSlope(index: maxIndex, width: 10, array: &roots)
-        calculateSlope(index: maxIndex, width: -10, array: &roots)
+        print(calculateSlope(index: maxIndex, width: 10, array: &roots))
+        print(calculateSlope(index: maxIndex, width: -10, array: &roots))
 
         return Float(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
     }
@@ -225,12 +226,9 @@ public class Listener: NSObject {
         return Double(index)*Double(self.samplingRate)/Double(N)
     }
     
-    private func calculateSlope(index:Int, width:Int, array:inout [Float]) -> Float {
-        var sum:Float = 0
-        for i in index...index+width{
-            sum += array[i]
-        }
-        return sum/Float(width)
+    private func calculateSlope(index:Int, width:Int, array: inout [Float]) -> Float {
+        //average 3 points as jank way of damping noise
+        return (array[index]-(array[min(max(0,index+width-3),array.count-1)..<max(0,min(array.count-1,(index+width+4)))].reduce(0,+)))/Float(width)
     }
     
     

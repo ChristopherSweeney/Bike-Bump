@@ -30,7 +30,8 @@ class AuthenticationController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         //callback to see if logged in
         //prevent loging in until server params are set
-        
+        self.performSegue(withIdentifier: "main", sender: nil)
+
        FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
             (status, error) in
             print("params fetched")
