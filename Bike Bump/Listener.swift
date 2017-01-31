@@ -86,13 +86,41 @@ public class Listener: NSObject {
             //keep track of how to control audio processing format -changing sample rate
             self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
             
-            //listen for mic data - maybe do fiter post fft
+            //process audio
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                if(self.currentSoundBuffers.count >= self.numBufferPerClip && self.detectFrequency(buffer: buffer)){
+                    
+                    //callback for UI
+                    DispatchQueue.main.async() {
+                        self.delegate?.ringDetected()
+                    }
+                  
+                    //get enviornment info - > maybe make location manager local
+                    let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
+                    let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
+                    let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
+                        
+                    //create wav file
+                    let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    let fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"))
+                    let file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
+                        
+
                     self.soundQueue.sync {
                         self.audioProcessingBlock(buffer: buffer)
                     }
+                }
             }
+            
+            //populated buffer with sound
+            self.inputNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.inputNode.inputFormat(forBus: 0)){
+                (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                    self.soundQueue.sync {
+                        self.bufferSound(buffer: buffer)
+                }
+            }
+
         }
         //cancel recording if any problems
         catch {
@@ -100,49 +128,37 @@ public class Listener: NSObject {
         }
     }
     
-    func audioProcessingBlock(buffer: AVAudioPCMBuffer) {
-        
+    func bufferSound(buffer: AVAudioPCMBuffer) {
         if(self.currentSoundBuffers.count < self.numBufferPerClip){
             self.currentSoundBuffers.append(buffer)
         }
         else {
             self.currentSoundBuffers.remove(at: 0)
             self.currentSoundBuffers.append(buffer)
-            if(self.detectFrequency(buffer: buffer)){
-                //callback for UI
-                DispatchQueue.main.async() {
-                    self.delegate?.ringDetected()
-                }
-                do {
-                    //get enviornment info - > maybe make location manager local
-                    let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
-                    let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
-                    let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
-                    
-                    //create wav file
-                    let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                    let fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"))
-                    let file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
-                    
-                    //merge buffers into files
-                    for buffer in self.currentSoundBuffers {
-                        try file.write(from: buffer)
-                    }
-                    //flush sound cache
-                    self.currentSoundBuffers.removeAll()
-                    
-                    //send files to server
-                    DispatchQueue.global(qos: .background).async {
-                        NetworkManager.sendToServer(path:fileURL)
-                        NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:curTime,value:0)
-                    }
-                }
-                catch{
-                    print("could not create file")
-                }
-            }
         }
     }
+    
+    func audioProcessingBlock(buffer: AVAudioPCMBuffer) {
+        //merge buffers into files
+        do {
+            for buffer in self.currentSoundBuffers {
+                try file.write(from: buffer)
+            }
+            //flush sound cache
+            self.currentSoundBuffers.removeAll()
+                    
+            //send files to server
+            DispatchQueue.global(qos: .background).async {
+                NetworkManager.sendToServer(path:fileURL)
+                NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:curTime,value:0)
+            }
+        }
+        catch {
+            print("could not create file")
+        }
+    }
+
+    
     
     private func setupFilter(){
          filter.bands[0].filterType = AVAudioUnitEQFilterType.lowPass
@@ -184,7 +200,7 @@ public class Listener: NSObject {
     private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
         let roots:[Float] = fft(soundClip: buffer)
         let maxIndex:Int = roots.index(of: roots.max()!)!
-        oprint(indexToFrequency(N: n, index: maxIndex))
+        print(indexToFrequency(N: n, index: maxIndex))
         
         print(calculateSlope(index: maxIndex, width: 10, array: &roots))
         print(calculateSlope(index: maxIndex, width: -10, array: &roots))
