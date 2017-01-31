@@ -89,7 +89,7 @@ public class Listener: NSObject {
             //process audio
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                if(self.currentSoundBuffers.count >= self.numBufferPerClip && self.detectFrequency(buffer: buffer)){
+                if(self.currentSoundBuffers.count >= self.numBufferPerClip && self.detectBell(buffer: buffer)){
                     
                     //callback for UI
                     DispatchQueue.main.async() {
@@ -198,19 +198,6 @@ public class Listener: NSObject {
     }
     
     private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
-        let roots:[Float] = fft(soundClip: buffer)
-        let maxIndex:Int = roots.index(of: roots.max()!)!
-        print(indexToFrequency(N: n, index: maxIndex))
-        
-        print(calculateSlope(index: maxIndex, width: 10, array: &roots))
-        print(calculateSlope(index: maxIndex, width: -10, array: &roots))
-        
-        return Float(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
-         return abs(Float(targetFrequncy) - fftFundementalFreq(soundClip: buffer)) < Float(targetFrequncyThreshold)
-    }
-    
-    private func fft(soundClip:AVAudioPCMBuffer) -> Float {
-        
         // create vectors
         var tempReal : [Float] = [Float](repeating: 0.0, count: n)
         var tempImag : [Float] = [Float](repeating: 0.0, count: n)
@@ -220,15 +207,23 @@ public class Listener: NSObject {
         // FFT
         vDSP_fft_zript(fftSetup!, &splitComplex, vDSP_Stride(1), &tempSplitComplex, log_n, FFTDirection(FFT_FORWARD));
         
-       //package results
+        //package results
         var fftMagnitudes = [Float](repeating:0.0, count:Int(n))
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
+        let roots:[Float] = fftMagnitudes.map {sqrtf($0)}
+       
+        //1. find largest peaks-> is one of them bell, or target bell frequency
+        //2. calc slope to all/ target peaks
         
-        return fftMagnitudes.map {sqrtf($0)}
+        let index:Int = self.frequencyToIndex(N: n, freq: targetFrequncy)
+        
+        print(calculateSlope(index: index, width: 10, array: &roots))
+        print(calculateSlope(index: index, width: -10, array: &roots))
+        
+         return abs(Float(targetFrequncy) - fftFundementalFreq(soundClip: buffer)) < Float(targetFrequncyThreshold)
     }
     
-    private func audioFileSettings() -> Dictionary<String, Any>
-    {
+    private func audioFileSettings() -> Dictionary<String, Any> {
         return [
             AVSampleRateKey : samplingRate,
             AVNumberOfChannelsKey : 2,
@@ -238,6 +233,10 @@ public class Listener: NSObject {
     
     private func indexToFrequency(N:Int, index:Int) -> Double {
         return Double(index)*Double(self.samplingRate)/Double(N)
+    }
+    
+    private func frequencyToIndex(N:Int, freq:Int) -> Double {
+        return Int(Double(freq)*Double(N)/Double(self.samplingRate))
     }
     
     private func calculateSlope(index:Int, width:Int, array: inout [Float]) -> Float {
