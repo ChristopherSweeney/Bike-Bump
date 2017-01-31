@@ -134,7 +134,7 @@ public class Listener: NSObject {
                     //send files to server
                     DispatchQueue.global(qos: .background).async {
                         NetworkManager.sendToServer(path:fileURL)
-//                        NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:curTime)
+                        NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:curTime,value:0)
                     }
                 }
                 catch{
@@ -217,7 +217,7 @@ public class Listener: NSObject {
     {
         return [
             AVSampleRateKey : samplingRate,
-            AVNumberOfChannelsKey : 1,
+            AVNumberOfChannelsKey : 2,
             AVFormatIDKey : kAudioFormatLinearPCM
         ]
     }

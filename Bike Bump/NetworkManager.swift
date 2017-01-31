@@ -12,7 +12,7 @@ import UIKit
 import AVFoundation
 import FirebaseStorage
 
-let roadInfo = "api/dings/add?"
+let addDing = "api/dings/add"
 let baseURL = "https://bikebump.media.mit.edu/"
 
 public class NetworkManager {
@@ -65,20 +65,18 @@ public class NetworkManager {
 //
 //    }
     
-    static func sendDing(lat:Float, lng:Float, timeStamp:String) {
+    static func sendDing(lat:Float, lng:Float, timeStamp:String, value:Int) {
         
         //should have user authenticated
         let user = FIRAuth.auth()?.currentUser
         let uid = user?.uid
-        let params:[URLQueryItem] = ["lat":lat,"long":lng,"timestamp":timeStamp,"uid":uid!].map {(key, value) in (URLQueryItem(name: key, value: String(describing: value)))}
+        let params:[URLQueryItem] = ["lat":lat,"lng":lng,"timestamp":timeStamp,"uid":uid!,"value":String(value)].map {(key, value) in (URLQueryItem(name: key, value: String(describing: value)))}
+        var request = URLRequest(url: URL(string:baseURL)!)
+        request.httpBody = params.s.dataUsingEncoding(NSUTF8StringEncoding);
         
-        var url = URLComponents(string: baseURL)!
-        print(url)
-        url.queryItems = params
-        let query = url.url
-        var request = URLRequest(url: query!)
-        request.httpMethod = "PUT"
-        
+        request.httpMethod = "POST"
+//        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        print(query?.absoluteString)
         //is this initialzed everytime?
         let session = URLSession.shared
         session.dataTask(with: request) {data, response, err in
