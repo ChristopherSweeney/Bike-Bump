@@ -181,11 +181,19 @@ public class Listener: NSObject {
         return self.audioEngine.isRunning
     }
     
-    private func detectFrequency(buffer:AVAudioPCMBuffer) -> Bool {
+    private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
+        let roots:[Float] = fft(soundClip: buffer)
+        let maxIndex:Int = roots.index(of: roots.max()!)!
+        oprint(indexToFrequency(N: n, index: maxIndex))
+        
+        print(calculateSlope(index: maxIndex, width: 10, array: &roots))
+        print(calculateSlope(index: maxIndex, width: -10, array: &roots))
+        
+        return Float(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
          return abs(Float(targetFrequncy) - fftFundementalFreq(soundClip: buffer)) < Float(targetFrequncyThreshold)
     }
     
-    private func fftFundementalFreq(soundClip:AVAudioPCMBuffer) -> Float {
+    private func fft(soundClip:AVAudioPCMBuffer) -> Float {
         
         // create vectors
         var tempReal : [Float] = [Float](repeating: 0.0, count: n)
@@ -199,18 +207,8 @@ public class Listener: NSObject {
        //package results
         var fftMagnitudes = [Float](repeating:0.0, count:Int(n))
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
-        var roots = fftMagnitudes.map {sqrtf($0)}
-        let maxIndex:Int = roots.index(of: roots.max()!)!
-//        print(indexToFrequency(N: n, index: maxIndex))
-       
-        //normalize reults
-//        var fullSpectrum = [Float](repeating:0.0, count:Int(n))
-//        vDSP_vsmul(roots, vDSP_Stride(1), [1.0 / Float(n)], &fullSpectrum, 1, vDSP_Length(n))
         
-        print(calculateSlope(index: maxIndex, width: 10, array: &roots))
-        print(calculateSlope(index: maxIndex, width: -10, array: &roots))
-
-        return Float(indexToFrequency(N: n, index: roots.index(of: roots.max()!)!))
+        return fftMagnitudes.map {sqrtf($0)}
     }
     
     private func audioFileSettings() -> Dictionary<String, Any>

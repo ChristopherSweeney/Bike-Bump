@@ -12,7 +12,7 @@ import UIKit
 import AVFoundation
 import FirebaseStorage
 
-let addDing = "api/dings/add"
+let addDing = "api/dings/add?"
 let baseURL = "https://bikebump.media.mit.edu/"
 
 public class NetworkManager {
@@ -70,9 +70,10 @@ public class NetworkManager {
         //should have user authenticated
         let user = FIRAuth.auth()?.currentUser
         let uid = user?.uid
-        let params:[URLQueryItem] = ["lat":lat,"lng":lng,"timestamp":timeStamp,"uid":uid!,"value":String(value)].map {(key, value) in (URLQueryItem(name: key, value: String(describing: value)))}
-        var request = URLRequest(url: URL(string:baseURL)!)
-        request.httpBody = params.s.dataUsingEncoding(NSUTF8StringEncoding);
+        let params:String = (["lat":lat,"lng":lng,"timestamp":timeStamp,"uid":uid!,"value":String(value)].map {(key, value) in key + "=" + String(value) + "&"}).reduce {("", $0 + $1)}
+        print(params)
+        var request = URLRequest(url: URL(string:baseURL+addDing)!)
+        request.httpBody = params.dataUsingEncoding(NSUTF8StringEncoding);
         
         request.httpMethod = "POST"
 //        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
