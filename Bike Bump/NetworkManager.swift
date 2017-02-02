@@ -70,14 +70,17 @@ public class NetworkManager {
         //should have user authenticated
         let user = FIRAuth.auth()?.currentUser
         let uid = user?.uid
-        let params:String = (["lat":lat,"lng":lng,"timestamp":timeStamp,"uid":uid!,"value":String(value)].map {(key, value) in key + "=" + String(value) + "&"}).reduce {("", $0 + $1)}
+        let params:[String:Any] = ["lat":lat,"lng":lng,"timestamp":timeStamp,"uid":uid!,"value":String(value)]
+        let paramArray:[String] = params.map {(key, value) in
+            key + "=" + String(describing: value) + "&"}
+        let paramString:String = paramArray.reduce("", +)
         print(params)
         var request = URLRequest(url: URL(string:baseURL+addDing)!)
-        request.httpBody = params.dataUsingEncoding(NSUTF8StringEncoding);
+        request.httpBody = paramString.data(using: String.Encoding.utf8);
         
         request.httpMethod = "POST"
 //        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        print(query?.absoluteString)
+        
         //is this initialzed everytime?
         let session = URLSession.shared
         session.dataTask(with: request) {data, response, err in

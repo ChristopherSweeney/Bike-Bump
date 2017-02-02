@@ -82,7 +82,7 @@ Fabric: Copyright 2016 Twitter, Inc. All Rights Reserved. Use of this software i
 
 ## Firebase
 
-Copyright 2016 Google
+Copyright 2017 Google
 
 ## FirebaseAnalytics
 
