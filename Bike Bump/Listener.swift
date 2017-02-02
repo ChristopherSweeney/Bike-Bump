@@ -28,6 +28,7 @@ public class Listener: NSObject {
     var n2:vDSP_Length
     var log_n:vDSP_Length
     var fftSetup: FFTSetup?
+    var grabAllSoundRecordings: Bool
     
     //temp storage
     var currentSoundBuffers:[AVAudioPCMBuffer]
@@ -54,7 +55,8 @@ public class Listener: NSObject {
          targetFrequncy:Int,
          targetFrequncyThreshold:Int,
          bufferLength:Int,
-         lowPassFreq:Int) {
+         lowPassFreq:Int,
+         grabAllSoundRecordings:Int) {
         
         self.samplingRate = samplingRate
         self.targetFrequncy = targetFrequncy
@@ -67,6 +69,7 @@ public class Listener: NSObject {
         self.n2 = vDSP_Length(bufferLength/2)
         self.log_n = vDSP_Length(log2(Float(bufferLength)))
         self.fftSetup = nil
+        self.grabAllSoundRecordings = Bool(grabAllSoundRecordings as NSNumber)
         
         self.soundClipDuration = soundClipDuration
         self.currentSoundBuffers = []
@@ -74,19 +77,62 @@ public class Listener: NSObject {
     }
     
     public func initializeAudio() {
-        do {
-            try audioSession.setActive(true)
-            try audioSession.setCategory(AVAudioSessionCategoryRecord)
-            try audioSession.setPreferredSampleRate(Double(self.samplingRate))
-            try audioSession.setPreferredInputNumberOfChannels(1)
-            try audioSession.setMode(AVAudioSessionModeMeasurement)
+          do {
+                try audioSession.setActive(true)
+                try audioSession.setCategory(AVAudioSessionCategoryRecord)
+                try audioSession.setPreferredSampleRate(Double(self.samplingRate))
+                try audioSession.setPreferredInputNumberOfChannels(1)
+                try audioSession.setMode(AVAudioSessionModeMeasurement)
+            }
+            //cancel recording if any problems
+            catch {
+                print("something went wrong")
+                return
+            }
+        
             self.setupFilter()
             self.audioEngine.attach(self.filter)
             
             //keep track of how to control audio processing format -changing sample rate
             self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
             
+            //process audio - keep longer buffer, cut out needed buffer based on time stamp
+            self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
+                    (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                    if(self.currentSoundBuffers.count >= self.numBufferPerClip && self.detectBell(buffer: buffer)){
+                        do {
+                            //callback for UI
+                            DispatchQueue.main.async() {
+                                self.delegate?.ringDetected()
+                            }
+                  
+                            //get enviornment info - > maybe make location manager local
+                            let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
+                            let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
+                            let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
+                            let epoch:String = String(LocationManager.sharedLocationManager.getEpoch())
+                            //create wav file
+                            let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                            let fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"))
+                            let file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
+                        
+
+                            self.soundQueue.sync {
+                                self.audioProcessingBlock(file: file)
+                            }
                     
+                            //send files to server
+                            DispatchQueue.global(qos: .background).async {
+                                NetworkManager.sendToServer(path:file.url)
+                                NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:epoch, value:0)
+                            }
+                        }
+                        catch {
+                            print("something went wrong")
+                        }
+                    }
+                }
+            
             //populated buffer with sound
             self.inputNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.inputNode.inputFormat(forBus: 0)){
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
@@ -96,11 +142,6 @@ public class Listener: NSObject {
             }
 
         }
-        //cancel recording if any problems
-        catch {
-            print("something went wrong")
-        }
-    }
     
     func bufferSound(buffer: AVAudioPCMBuffer) {
         if(self.currentSoundBuffers.count < self.numBufferPerClip){

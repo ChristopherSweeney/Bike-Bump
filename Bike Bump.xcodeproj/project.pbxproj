@@ -297,7 +297,7 @@
 				TargetAttributes = {
 					BB42C8391E273CD600BB4024 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = CXHXL38L66;
+						DevelopmentTeam = WBGGT8PD5V;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -670,7 +670,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Bike Bump/Bike Bump.entitlements";
-				DEVELOPMENT_TEAM = CXHXL38L66;
+				DEVELOPMENT_TEAM = WBGGT8PD5V;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -691,7 +691,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Bike Bump/Bike Bump.entitlements";
-				DEVELOPMENT_TEAM = CXHXL38L66;
+				DEVELOPMENT_TEAM = WBGGT8PD5V;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
