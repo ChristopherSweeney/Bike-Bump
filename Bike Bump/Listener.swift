@@ -99,6 +99,8 @@ public class Listener: NSObject {
             //process audio - keep longer buffer, cut out needed buffer based on time stamp
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                     (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                   print("fft")
+
                     if(self.currentSoundBuffers.count >= self.numBufferPerClip && (self.grabAllSoundRecordings || self.detectBell(buffer: buffer))){
                         do {
                             //callback for UI
@@ -113,17 +115,19 @@ public class Listener: NSObject {
                             let epoch:Int = LocationManager.sharedLocationManager.getEpoch()
                             //create wav file
                             let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                            let fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"))
-                            let file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
+                            //maybe send raw data to server, quicker, but more work on server side to package in file - > would have to be packaged through backend?
+                            let filePath:String = base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"
+                            let fileURL:URL = URL.init(fileURLWithPath: filePath)
+                            var file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
                         
 
                             self.soundQueue.sync {
                                 self.audioProcessingBlock(file: file)
                             }
-                    
+                            //dealloc file so saved to mem before packagingand sending
                             //send files to server
                             DispatchQueue.global(qos: .background).async {
-                                NetworkManager.sendToServer(path:file.url)
+                                NetworkManager.sendToServer(path:fileURL)
                                 NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:epoch, value:0)
                             }
                         }
@@ -136,6 +140,8 @@ public class Listener: NSObject {
             //populated buffer with sound
             self.inputNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.inputNode.inputFormat(forBus: 0)){
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                print("update")
+
                     self.soundQueue.sync {
                         self.bufferSound(buffer: buffer)
                 }

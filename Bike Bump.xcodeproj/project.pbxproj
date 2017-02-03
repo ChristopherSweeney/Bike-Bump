@@ -160,10 +160,10 @@
 				BB020BC81E33F64B0038A03C /* Bike Bump.entitlements */,
 				BB42C83D1E273CD600BB4024 /* AppDelegate.swift */,
 				BB42C83F1E273CD600BB4024 /* AuthenticationController.swift */,
+				BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */,
 				BB42C86F1E2BE90D00BB4024 /* Listener.swift */,
 				BB42C8711E2BE92400BB4024 /* NetworkManager.swift */,
 				BB42C8731E2C281400BB4024 /* LocationManager.swift */,
-				BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */,
 				BBB2B9DE1E327FCB003975C5 /* UI */,
 				BBB2B9DD1E327FAF003975C5 /* SupportingFiles */,
 			);
