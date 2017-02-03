@@ -99,14 +99,14 @@ public class Listener: NSObject {
             //process audio - keep longer buffer, cut out needed buffer based on time stamp
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                     (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                    if(self.currentSoundBuffers.count >= self.numBufferPerClip && self.detectBell(buffer: buffer)){
+                    if(self.currentSoundBuffers.count >= self.numBufferPerClip && (self.grabAllSoundRecordings || self.detectBell(buffer: buffer))){
                         do {
                             //callback for UI
                             DispatchQueue.main.async() {
                                 self.delegate?.ringDetected()
                             }
                   
-                            //get enviornment info - > maybe make location manager local
+                            //get enviornment info
                             let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
                             let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
                             let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
@@ -163,15 +163,16 @@ public class Listener: NSObject {
             self.currentSoundBuffers.removeAll()
         }
         catch {
-            print("could not create file")
+            print("could not write file")
         }
     }
 
     
     
     private func setupFilter(){
-         filter.bands[0].filterType = AVAudioUnitEQFilterType.lowPass
-         filter.bands[0].frequency = Float(lowPassFreq);
+         filter.bands[0].filterType = AVAudioUnitEQFilterType.bandPass
+         filter.bands[0].frequency = Float(targetFrequncy);
+         filter.bands[0].bandwidth = 0.1
     }
 
     public func startListening() {

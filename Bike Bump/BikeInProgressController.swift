@@ -52,7 +52,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
         if targetFreq <= 0 {
             targetFreq = 3000
         }
-        var lowPassFreq:Int = param!.configValue(forKey: "bellTargetFreq").numberValue as! Int
+        var lowPassFreq:Int = param!.configValue(forKey: "lowPassFreq").numberValue as! Int
         if lowPassFreq <= 0 {
             lowPassFreq = 4000
         }
@@ -61,12 +61,12 @@ class BikeInProgressController: UIViewController, AudioEvents {
             bufferLength = 8192
         }
         var grabAllSoundRecordings:Int = param!.configValue(forKey: "grabAllSoundRecordings").numberValue as! Int
-        if grabAllSoundRecordings < 0 || grabAllSoundRecordings > 0 {
+        if grabAllSoundRecordings < 0 || grabAllSoundRecordings > 1 {
             grabAllSoundRecordings = 0
         }
         
         //initialize audio listening pipeline
-        self.listener = Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: 1000, bufferLength: bufferLength, lowPassFreq: lowPassFreq, grabAllSoundRecordings :grabAllSoundRecordings)
+        self.listener = Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: 10, bufferLength: bufferLength, lowPassFreq: lowPassFreq, grabAllSoundRecordings :grabAllSoundRecordings)
         
         //setup audio processing graph
         listener?.initializeAudio()
