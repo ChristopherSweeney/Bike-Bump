@@ -102,7 +102,6 @@ public class Listener: NSObject {
                    print("fft")
 
                     if(self.currentSoundBuffers.count >= self.numBufferPerClip && (self.grabAllSoundRecordings || self.detectBell(buffer: buffer))){
-                        do {
                             //callback for UI
                             DispatchQueue.main.async() {
                                 self.delegate?.ringDetected()
@@ -118,11 +117,9 @@ public class Listener: NSObject {
                             //maybe send raw data to server, quicker, but more work on server side to package in file - > would have to be packaged through backend?
                             let filePath:String = base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"
                             let fileURL:URL = URL.init(fileURLWithPath: filePath)
-                            var file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
-                        
 
                             self.soundQueue.sync {
-                                self.audioProcessingBlock(file: file)
+                                self.audioProcessingBlock(fileURL: fileURL)
                             }
                             //dealloc file so saved to mem before packagingand sending
                             //send files to server
@@ -130,10 +127,6 @@ public class Listener: NSObject {
                                 NetworkManager.sendToServer(path:fileURL)
                                 NetworkManager.sendDing(lat:Float(lat), lng:Float(long), timeStamp:epoch, value:0)
                             }
-                        }
-                        catch {
-                            print("something went wrong")
-                        }
                     }
                 }
             
@@ -159,9 +152,11 @@ public class Listener: NSObject {
         }
     }
     
-    func audioProcessingBlock(file: AVAudioFile) {
+    func audioProcessingBlock(fileURL: URL) {
+        
         //merge buffers into files
         do {
+            let file:AVAudioFile = try AVAudioFile(forWriting:fileURL, settings: self.audioFileSettings())
             for buffer in self.currentSoundBuffers {
                 try file.write(from: buffer)
             }
