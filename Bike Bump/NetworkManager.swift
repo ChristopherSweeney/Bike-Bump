@@ -65,7 +65,7 @@ public class NetworkManager {
 //
 //    }
     
-    static func sendDing(lat:Float, lng:Float, timeStamp:String, value:Int) {
+    static func sendDing(lat:Float, lng:Float, timeStamp:Int, value:Int) {
         
         //should have user authenticated
         let user = FIRAuth.auth()?.currentUser
@@ -74,12 +74,11 @@ public class NetworkManager {
         let paramArray:[String] = params.map {(key, value) in
             key + "=" + String(describing: value) + "&"}
         let paramString:String = paramArray.reduce("", +)
-        print(params)
+        print(paramString)
         var request = URLRequest(url: URL(string:baseURL+addDing)!)
         request.httpBody = paramString.data(using: String.Encoding.utf8);
         
         request.httpMethod = "POST"
-//        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
         //is this initialzed everytime?
         let session = URLSession.shared

@@ -132,7 +132,12 @@ class BikeInProgressController: UIViewController, AudioEvents {
         self.rideButton.backgroundColor = UIColor.yellow
         let fadeTime = DispatchTime.now() + .seconds(1)
         DispatchQueue.main.asyncAfter(deadline: fadeTime) {
-            self.rideButton.backgroundColor = UIColor.red
+            if (self.listener?.isListening())!{
+                self.rideButton.backgroundColor = UIColor.red
+            }
+            else {
+                self.rideButton.backgroundColor = UIColor.green
+            }
         }
     }
 

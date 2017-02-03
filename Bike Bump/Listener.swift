@@ -110,7 +110,7 @@ public class Listener: NSObject {
                             let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
                             let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
                             let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
-                            let epoch:String = String(LocationManager.sharedLocationManager.getEpoch())
+                            let epoch:Int = LocationManager.sharedLocationManager.getEpoch()
                             //create wav file
                             let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                             let fileURL:URL = URL.init(fileURLWithPath: (base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"))
@@ -230,13 +230,13 @@ public class Listener: NSObject {
         print(calculateSlope(index: index, width: 10, array: &roots))
         print(calculateSlope(index: index, width: -10, array: &roots))
         
-         return true
+         return false
     }
     
     private func audioFileSettings() -> Dictionary<String, Any> {
         return [
             AVSampleRateKey : samplingRate,
-            AVNumberOfChannelsKey : 2,
+            AVNumberOfChannelsKey : 1,
             AVFormatIDKey : kAudioFormatLinearPCM
         ]
     }

@@ -35,8 +35,8 @@ public class LocationManager: NSObject {
         return self.formatter.string(from: Date())
     }
     
-    func getEpoch() -> String {
-        return String(Date().timeIntervalSince1970)
+    func getEpoch() -> Int {
+        return Int(Date().timeIntervalSince1970)
     }
     
     
