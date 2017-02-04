@@ -47,11 +47,13 @@ class AuthenticationController: UIViewController {
     }
 
     func login() {
+        print("login function")
         FIRAuth.auth()!.signIn(withEmail: user.text!,
                                password:  password.text!)
     }
     
     func createUser() {
+        print("create User")
         FIRAuth.auth()!.createUser(withEmail: self.user.text!,
                                    password: self.password.text!) { user, error in
                                     if error == nil {

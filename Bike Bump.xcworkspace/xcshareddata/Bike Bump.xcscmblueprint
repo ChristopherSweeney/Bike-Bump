@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2AFA6F3D65ECA9FA4DAABD2AB5F5D4835039B094",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2AFA6F3D65ECA9FA4DAABD2AB5F5D4835039B094" : 9223372036854775807,
+    "47132B5227D62E246277DAC2D0E08AA4A7B749A7" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DC18DA5D-3BC6-4EA3-B5FE-946617CCE82D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2AFA6F3D65ECA9FA4DAABD2AB5F5D4835039B094" : "ios\/",
+    "47132B5227D62E246277DAC2D0E08AA4A7B749A7" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Bike Bump",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Bike Bump.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ChristopherSweeney\/Bike-Bump",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2AFA6F3D65ECA9FA4DAABD2AB5F5D4835039B094"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/yasushisakai\/bikebump.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "47132B5227D62E246277DAC2D0E08AA4A7B749A7"
+    }
+  ]
+}
