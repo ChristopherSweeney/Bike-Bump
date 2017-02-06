@@ -20,6 +20,10 @@
 		BB42C8721E2BE92400BB4024 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8711E2BE92400BB4024 /* NetworkManager.swift */; };
 		BB42C8741E2C281400BB4024 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C8731E2C281400BB4024 /* LocationManager.swift */; };
 		BB4AA4E51E309FB300D9944A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */; };
+		BB6F288D1E48C0500046D4B4 /* DingAudio_Sample_05-02-2017-15-09-52_lat=42.3579488_long=-71.0994353.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB6F288C1E48C0500046D4B4 /* DingAudio_Sample_05-02-2017-15-09-52_lat=42.3579488_long=-71.0994353.wav */; };
+		BB6F288F1E48C08A0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-21-48_lat=42.362203_long=-71.0995406.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB6F288E1E48C08A0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-21-48_lat=42.362203_long=-71.0995406.wav */; };
+		BB6F28911E48C0AB0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-22-10_lat=42.3628927_long=-71.1001544.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB6F28901E48C0AB0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-22-10_lat=42.3628927_long=-71.1001544.wav */; };
+		BB6F28931E48C0EA0046D4B4 /* DingAudio_Sample_05-02-2017-16-38-36_lat=42.3630517_long=-71.0994546.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB6F28921E48C0EA0046D4B4 /* DingAudio_Sample_05-02-2017-16-38-36_lat=42.3630517_long=-71.0994546.wav */; };
 		BBB771C81E2EA1D30082A2DF /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */; };
 		BBB771C91E2EA2640082A2DF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB771C11E2E9D540082A2DF /* AVFoundation.framework */; };
 		BBB771CA1E2EA2710082A2DF /* Listener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C86F1E2BE90D00BB4024 /* Listener.swift */; };
@@ -84,6 +88,10 @@
 		BB42C8711E2BE92400BB4024 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		BB42C8731E2C281400BB4024 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BB6F288C1E48C0500046D4B4 /* DingAudio_Sample_05-02-2017-15-09-52_lat=42.3579488_long=-71.0994353.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "DingAudio_Sample_05-02-2017-15-09-52_lat=42.3579488_long=-71.0994353.wav"; sourceTree = "<group>"; };
+		BB6F288E1E48C08A0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-21-48_lat=42.362203_long=-71.0995406.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "NoDingAudio_Sample_05-02-2017-15-21-48_lat=42.362203_long=-71.0995406.wav"; sourceTree = "<group>"; };
+		BB6F28901E48C0AB0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-22-10_lat=42.3628927_long=-71.1001544.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "NoDingAudio_Sample_05-02-2017-15-22-10_lat=42.3628927_long=-71.1001544.wav"; sourceTree = "<group>"; };
+		BB6F28921E48C0EA0046D4B4 /* DingAudio_Sample_05-02-2017-16-38-36_lat=42.3630517_long=-71.0994546.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "DingAudio_Sample_05-02-2017-16-38-36_lat=42.3630517_long=-71.0994546.wav"; sourceTree = "<group>"; };
 		BBB771BF1E2E9D4D0082A2DF /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		BBB771C11E2E9D540082A2DF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		BE3330FC0014E55C92105496 /* Pods_Bike_Bump.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bike_Bump.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +143,7 @@
 		BB42C8311E273CD500BB4024 = {
 			isa = PBXGroup;
 			children = (
+				BB6F288B1E48C0320046D4B4 /* Ding Samples */,
 				BB42C83C1E273CD600BB4024 /* Bike Bump */,
 				BB42C8511E273CD600BB4024 /* Bike BumpTests */,
 				BB42C85C1E273CD600BB4024 /* Bike BumpUITests */,
@@ -186,6 +195,17 @@
 				BB42C85F1E273CD600BB4024 /* Info.plist */,
 			);
 			path = "Bike BumpUITests";
+			sourceTree = "<group>";
+		};
+		BB6F288B1E48C0320046D4B4 /* Ding Samples */ = {
+			isa = PBXGroup;
+			children = (
+				BB6F288C1E48C0500046D4B4 /* DingAudio_Sample_05-02-2017-15-09-52_lat=42.3579488_long=-71.0994353.wav */,
+				BB6F28921E48C0EA0046D4B4 /* DingAudio_Sample_05-02-2017-16-38-36_lat=42.3630517_long=-71.0994546.wav */,
+				BB6F288E1E48C08A0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-21-48_lat=42.362203_long=-71.0995406.wav */,
+				BB6F28901E48C0AB0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-22-10_lat=42.3628927_long=-71.1001544.wav */,
+			);
+			name = "Ding Samples";
 			sourceTree = "<group>";
 		};
 		BBB2B9DD1E327FAF003975C5 /* SupportingFiles */ = {
@@ -348,7 +368,11 @@
 				BB42C8481E273CD600BB4024 /* LaunchScreen.storyboard in Resources */,
 				BB4AA4E51E309FB300D9944A /* GoogleService-Info.plist in Resources */,
 				BB42C8451E273CD600BB4024 /* Assets.xcassets in Resources */,
+				BB6F288F1E48C08A0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-21-48_lat=42.362203_long=-71.0995406.wav in Resources */,
 				BB42C8431E273CD600BB4024 /* Main.storyboard in Resources */,
+				BB6F28931E48C0EA0046D4B4 /* DingAudio_Sample_05-02-2017-16-38-36_lat=42.3630517_long=-71.0994546.wav in Resources */,
+				BB6F28911E48C0AB0046D4B4 /* NoDingAudio_Sample_05-02-2017-15-22-10_lat=42.3628927_long=-71.1001544.wav in Resources */,
+				BB6F288D1E48C0500046D4B4 /* DingAudio_Sample_05-02-2017-15-09-52_lat=42.3579488_long=-71.0994353.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
