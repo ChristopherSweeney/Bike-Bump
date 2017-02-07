@@ -42,6 +42,9 @@ public class Listener: NSObject {
     var filter:AVAudioUnitEQ//lowpass filter
     var lowPassFreq:Int
     
+    //debug
+    var player:AVAudioPlayerNode
+    
     //microphone harware params
     var samplingRate:Int //hz
     var targetFrequncy:Int //hz
@@ -74,6 +77,9 @@ public class Listener: NSObject {
         self.soundClipDuration = soundClipDuration
         self.currentSoundBuffers = []
         self.numBufferPerClip = Int(soundClipDuration*Double(samplingRate)/Double(bufferLength))
+        
+        //debug
+        self.player = AVAudioPlayerNode()
     }
     
     public func initializeAudio() {
@@ -92,15 +98,20 @@ public class Listener: NSObject {
         
             self.setupFilter()
             self.audioEngine.attach(self.filter)
-            
+
+
+            //debug
+            //setupPlayer()
+        
             //keep track of how to control audio processing format -changing sample rate
             self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
-            
+        
+        
+        
+        
             //process audio - keep longer buffer, cut out needed buffer based on time stamp
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                     (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                   print("fft")
-
                     if(self.currentSoundBuffers.count >= self.numBufferPerClip && (self.grabAllSoundRecordings || self.detectBell(buffer: buffer))){
                             //callback for UI
                             DispatchQueue.main.async() {
@@ -133,8 +144,6 @@ public class Listener: NSObject {
             //populated buffer with sound
             self.inputNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.inputNode.inputFormat(forBus: 0)){
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                print("update")
-
                     self.soundQueue.sync {
                         self.bufferSound(buffer: buffer)
                 }
@@ -183,6 +192,7 @@ public class Listener: NSObject {
                 do {
                     try self.audioEngine.start()
                     self.fftSetup = vDSP_create_fftsetup(self.log_n, FFTRadix(kFFTRadix2))!
+                    //self.player.play()
                     print("started engine")
                 }
                 catch {
@@ -222,16 +232,25 @@ public class Listener: NSObject {
         var fftMagnitudes = [Float](repeating:0.0, count:Int(n))
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
         var roots:[Float] = fftMagnitudes.map {sqrtf($0)}
-       
+        
+        //debug
+        let maxIndex:Int =  roots.index(of: roots.max()!)!
+       // if indexToFrequency(N: n, index: maxIndex)>2500 && indexToFrequency(N: n, index: maxIndex) < 3500{
+        //    print("hell0")
+       // }
+        
         //1. find largest peaks-> is one of them bell, or target bell frequency
         //2. calc slope to all/ target peaks
         
         let index:Int = Int(Int(self.frequencyToIndex(N: n, freq: targetFrequncy)))
         
-        print(calculateSlope(index: index, width: 10, array: &roots))
-        print(calculateSlope(index: index, width: -10, array: &roots))
+        let front:Float = calculateSlope(index: index, width: 100, array: &roots)
+        let back:Float = calculateSlope(index: index, width: -100, array: &roots)
         
-         return false
+         if indexToFrequency(N: n, index: maxIndex)>2500 && indexToFrequency(N: n, index: maxIndex) < 3500{
+            print("hell0")
+         }
+        return false
     }
     
     private func audioFileSettings() -> Dictionary<String, Any> {
@@ -253,6 +272,34 @@ public class Listener: NSObject {
     private func calculateSlope(index:Int, width:Int, array: inout [Float]) -> Float {
         //average 3 points as jank way of damping noise
         return (array[index]-(array[min(max(0,index+width-3),array.count-1)..<max(0,min(array.count-1,(index+width+4)))].reduce(0,+)))/Float(width)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //debug
+    private func setupPlayer() {
+        audioEngine.attach(player)
+        var files:[AVAudioFile] = []
+        do {
+            files = try FileManager.default.contentsOfDirectory(at: Bundle.main.bundleURL
+                , includingPropertiesForKeys: nil, options: []).filter() {$0.absoluteString.range(of:"Ding") != nil}.map() { try AVAudioFile.init(forReading: $0)}
+        }
+        catch{
+            print("No")
+        }
+       print(files)
+        for file in files {
+            player.scheduleFile(file, at: nil, completionHandler: {print("played" + file.url.absoluteString)})
+        }
+         self.audioEngine.connect(player, to: self.filter, format:files[0].fileFormat)
     }
     
     

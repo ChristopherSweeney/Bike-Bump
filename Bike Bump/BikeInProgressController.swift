@@ -64,7 +64,6 @@ class BikeInProgressController: UIViewController, AudioEvents {
         if grabAllSoundRecordings < 0 || grabAllSoundRecordings > 1 {
             grabAllSoundRecordings = 0
         }
-        
         //initialize audio listening pipeline
         self.listener = Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: 10, bufferLength: bufferLength, lowPassFreq: lowPassFreq, grabAllSoundRecordings :grabAllSoundRecordings)
         

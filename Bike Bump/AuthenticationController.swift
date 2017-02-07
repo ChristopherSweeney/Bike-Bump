@@ -12,7 +12,7 @@ import CoreLocation
 import FirebaseRemoteConfig
 
 
-class AuthenticationController: UIViewController {
+class AuthenticationController: UIViewController, UITextFieldDelegate {
     //store crudentials locally
     
     @IBOutlet weak var user: UITextField!
@@ -25,6 +25,8 @@ class AuthenticationController: UIViewController {
         super.viewDidLoad()
         loginButton.addTarget(self, action: #selector(self.login), for:  UIControlEvents.touchUpInside)
         signUp.addTarget(self, action: #selector(self.createUser), for:  UIControlEvents.touchUpInside)
+        user.delegate = self
+        password.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -35,8 +37,8 @@ class AuthenticationController: UIViewController {
             print("params fetched")
             FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
                 if user != nil {
-                    self.performSegue(withIdentifier: "main", sender: nil)
-                    }
+                    self.performSegue(withIdentifier: "main", sender: self)
+                }
             }
         }
     }
@@ -61,6 +63,12 @@ class AuthenticationController: UIViewController {
                                                                password: self.password.text!)
                                     }
                         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("here")
+        self.view.endEditing(true)
+        return false
     }
 }
 
