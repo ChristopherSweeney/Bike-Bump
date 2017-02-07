@@ -233,23 +233,27 @@ public class Listener: NSObject {
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
         var roots:[Float] = fftMagnitudes.map {sqrtf($0)}
         
-        //debug
-        let maxIndex:Int =  roots.index(of: roots.max()!)!
-       // if indexToFrequency(N: n, index: maxIndex)>2500 && indexToFrequency(N: n, index: maxIndex) < 3500{
-        //    print("hell0")
-       // }
+        let lowerBound:Int = Int(Int(self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)))
+        let upperBound:Int = Int(Int(self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)))
+
+        //speed up
+        let crest:Int =  roots[max(lowerBound,0)..<min(upperBound,roots.count)].index(of: roots[lowerBound..<upperBound].max()!)!
+    
         
-        //1. find largest peaks-> is one of them bell, or target bell frequency
-        //2. calc slope to all/ target peaks
+        let front:Float = calculateSlope(index: crest, width: 100, array: &roots)
+        let back:Float = calculateSlope(index: crest, width: -100, array: &roots)
         
-        let index:Int = Int(Int(self.frequencyToIndex(N: n, freq: targetFrequncy)))
-        
-        let front:Float = calculateSlope(index: index, width: 100, array: &roots)
-        let back:Float = calculateSlope(index: index, width: -100, array: &roots)
-        
-         if indexToFrequency(N: n, index: maxIndex)>2500 && indexToFrequency(N: n, index: maxIndex) < 3500{
-            print("hell0")
-         }
+        let maxIndex:Int = roots.index(of: roots.max()!)!
+        if indexToFrequency(N: n, index: maxIndex)>2500 && indexToFrequency(N: n, index: maxIndex) < 3500{
+            print("here")
+            print(front)
+            print(back)
+            print(crest)
+            print(upperBound)
+            print(lowerBound)
+            print(maxIndex)
+        }
+       
         return false
     }
     

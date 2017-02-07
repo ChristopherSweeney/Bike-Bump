@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Bike Bump/Listener.swift"
-            timestampString = "508130084.925345"
+            timestampString = "508132425.419918"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
             landmarkName = "detectBell(buffer:)"
             landmarkType = "7">
          </BreakpointContent>
