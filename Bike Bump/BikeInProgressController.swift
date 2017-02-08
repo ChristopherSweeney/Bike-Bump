@@ -64,8 +64,12 @@ class BikeInProgressController: UIViewController, AudioEvents {
         if grabAllSoundRecordings < 0 || grabAllSoundRecordings > 1 {
             grabAllSoundRecordings = 0
         }
+        var targetFrequencyThreshold:Int = param!.configValue(forKey: "targetFrequencyThreshold").numberValue as! Int
+        if targetFrequencyThreshold < 0 {
+            targetFrequencyThreshold = 100
+        }
         //initialize audio listening pipeline
-        self.listener = Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: 250, bufferLength: bufferLength, lowPassFreq: lowPassFreq, grabAllSoundRecordings :grabAllSoundRecordings)
+        self.listener = Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: targetFrequencyThreshold, bufferLength: bufferLength, lowPassFreq: lowPassFreq, grabAllSoundRecordings :grabAllSoundRecordings)
         
         //setup audio processing graph
         listener?.initializeAudio()
