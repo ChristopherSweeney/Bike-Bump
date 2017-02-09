@@ -166,10 +166,8 @@
 		BB42C83C1E273CD600BB4024 /* Bike Bump */ = {
 			isa = PBXGroup;
 			children = (
-				BB020BC81E33F64B0038A03C /* Bike Bump.entitlements */,
+				BBFD0AAF1E4CEB0200E9FDBE /* ViewControllers */,
 				BB42C83D1E273CD600BB4024 /* AppDelegate.swift */,
-				BB42C83F1E273CD600BB4024 /* AuthenticationController.swift */,
-				BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */,
 				BB42C86F1E2BE90D00BB4024 /* Listener.swift */,
 				BB42C8711E2BE92400BB4024 /* NetworkManager.swift */,
 				BB42C8731E2C281400BB4024 /* LocationManager.swift */,
@@ -211,6 +209,7 @@
 		BBB2B9DD1E327FAF003975C5 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				BB020BC81E33F64B0038A03C /* Bike Bump.entitlements */,
 				BB42C8491E273CD600BB4024 /* Info.plist */,
 				BB42C8441E273CD600BB4024 /* Assets.xcassets */,
 				BB4AA4E41E309FB300D9944A /* GoogleService-Info.plist */,
@@ -237,6 +236,15 @@
 				767DA7A288B78CF231DEED9A /* Pods_Bike_BumpUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BBFD0AAF1E4CEB0200E9FDBE /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */,
+				BB42C83F1E273CD600BB4024 /* AuthenticationController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

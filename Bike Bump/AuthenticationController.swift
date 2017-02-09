@@ -13,10 +13,8 @@ import FirebaseRemoteConfig
 
 
 class AuthenticationController: UIViewController, UITextFieldDelegate {
-    //store crudentials locally
     
     @IBOutlet weak var user: UITextField!
-    //encrypt dots
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUp: UIButton!
@@ -66,7 +64,6 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("here")
         self.view.endEditing(true)
         return false
     }
