@@ -6,6 +6,8 @@
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
 import FirebaseAuth
+import FirebaseCore
+import FirebaseDatabase
 import UIKit
 import AVFoundation
 import CoreLocation
@@ -31,16 +33,27 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
         //block if network is not connected- > in Future, allow local storage and push sound clips when eventually connected with network
         //callback to see if logged in
         //prevent loging in until server params are set
-       FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
-            (status, error) in
-            print("params fetched")
-            FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
-                if user != nil {
-                    self.performSegue(withIdentifier: "main", sender: self)
+        let isConnected = FIRDatabase.database().reference(withPath: ".info/connected")
+        isConnected.observe(.value, with: { snapshot in
+            if let connected = snapshot.value as? Bool , connected {
+                //pull Firebase info
+                FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
+                    (status, error) in
+                    print("params fetched")
+                    FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
+                        if user != nil {
+                            self.performSegue(withIdentifier: "main", sender: self)
+                        }
+                    }
                 }
+
+            } else {
+                let alert = UIAlertController(title: "Network connection", message: "Network connection required. Please connect to network.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
-        }
-    }
+        })
+          }
 
    override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
