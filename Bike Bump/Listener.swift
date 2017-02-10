@@ -55,6 +55,8 @@ public class Listener: NSObject {
     var targetFrequncyThreshold:Int //hz
     var targetSlope:Float
     
+    //location manager
+    let locationManager = LocationManager.sharedLocationManager
     
     //queue to control concurrency problems
     let soundQueue:DispatchQueue = DispatchQueue(label: "com.example.audiofftqueue")
@@ -123,17 +125,17 @@ public class Listener: NSObject {
                     if(self.currentSoundBuffers.count >= self.numBufferPerClip && (self.grabAllSoundRecordings || self.detectBell(buffer: buffer))){
                         
                             //user feedback for bell
-                            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
                             //callback for UI
                             DispatchQueue.main.async() {
                                 self.delegate?.ringDetected()
                             }
                   
                             //get enviornment info
-                            let lat:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
-                            let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
-                            let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
-                            let epoch:Int = LocationManager.sharedLocationManager.getEpoch()
+                            let lat:Double = self.locationManager.getLocation().coordinate.latitude
+                            let long:Double = self.locationManager.getLocation().coordinate.latitude
+                            let curTime:String = self.locationManager.getCurrentTime()
+                            let epoch:Int = self.locationManager.getEpoch()
                         
                             //create wav file
                             let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]

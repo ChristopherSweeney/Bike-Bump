@@ -131,7 +131,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     }
     
     func didLift() {
-        UIView.animate(withDuration: 0.1,
+        UIView.animate(withDuration: 0.025,
                        animations: {
                         self.rideButton.transform = CGAffineTransform.identity
         })
