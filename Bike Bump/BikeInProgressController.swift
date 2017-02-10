@@ -25,7 +25,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     //firebase
     var param:FIRRemoteConfig?
     
-    //moniter
+    //object to encapsulate listening functionallity
     var listener:Listener?
     
     override func viewDidLoad() {
@@ -90,7 +90,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
         rideButton.frame = CGRect(x: rideButton.frame.origin.x/2, y: rideButton.frame.origin.y, width: 300, height: 300)
         rideButton.layer.cornerRadius = rideButton.bounds.size.width * 0.5
         rideButton.addTarget(self, action: #selector(self.rideAction), for:  UIControlEvents.touchUpInside)
-         rideButton.addTarget(self, action: #selector(self.didTouch), for:  UIControlEvents.touchDown)
+        rideButton.addTarget(self, action: #selector(self.didTouch), for:  UIControlEvents.touchDown)
         rideButton.addTarget(self, action: #selector(self.didLift), for:  UIControlEvents.touchUpInside)
 
     }
@@ -131,7 +131,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     }
     
     func didLift() {
-        UIView.animate(withDuration: 0.2,
+        UIView.animate(withDuration: 0.1,
                        animations: {
                         self.rideButton.transform = CGAffineTransform.identity
         })

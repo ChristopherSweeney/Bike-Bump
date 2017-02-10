@@ -18,7 +18,7 @@ protocol AudioEvents:class {
     func ringDetected()
 }
 
-/* The Listener object buffers mic input and sends a sound clip if a central frequency is heard at a certain frequency post fft */
+/* The Listener object buffers mic input and sends a sound clip to the server tied with location and time, if a central frequency is heard at a certain frequency post fft */
 
 public class Listener: NSObject {
     

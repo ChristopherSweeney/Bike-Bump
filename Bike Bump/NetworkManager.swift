@@ -17,7 +17,7 @@ let baseURL = "https://bikebump.media.mit.edu/"
 
 public class NetworkManager {
 
-    //firebase storage
+    //firebase direct storage for audio files
     static func sendToServer(path: URL) {
         
         let storage = FIRStorage.storage().reference()
@@ -46,24 +46,6 @@ public class NetworkManager {
 
     }
     
-    //user name?
-//   static func getParams(lat:Float, lng:Float, timeStamp:String) {
-//        let url:String = NetworkManager.getEndpointForCoordinates(lat: lat, lng: lng)
-//        var request = URLRequest(url: URL(string: url)!)
-//        request.httpMethod = "GET"
-//        //is this initialzed everytime?
-//        let session = URLSession.shared
-//        session.dataTask(with: request) {data, response, err in
-//            print("storing user data results to Firebase")
-//            FIRDatabase.database().reference().child("dings").updateChildValues(["test2":234])
-//
-//
-//            let httpResponse = response as! HTTPURLResponse
-//            let statusCode = httpResponse.statusCode
-//            print(httpResponse.description)
-//            }.resume()
-//
-//    }
     
     static func sendDing(lat:Float, lng:Float, timeStamp:Int, value:Int) {
         
