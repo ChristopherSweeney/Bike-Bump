@@ -56,7 +56,6 @@ public class NetworkManager {
         let paramArray:[String] = params.map {(key, value) in
             key + "=" + String(describing: value) + "&"}
         let paramString:String = paramArray.reduce("", +)
-        print(paramString)
         var request = URLRequest(url: URL(string:baseURL+addDing)!)
         request.httpBody = paramString.data(using: String.Encoding.utf8);
         
@@ -66,7 +65,11 @@ public class NetworkManager {
         let session = URLSession.shared
         session.dataTask(with: request) {data, response, err in
             print("storing user data results to Firebase")
-            let httpResponse = response as! HTTPURLResponse
+            //protect against null network return
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("network connection issues")
+                return
+            }
             let statusCode = httpResponse.statusCode
             print(statusCode)
             }.resume()

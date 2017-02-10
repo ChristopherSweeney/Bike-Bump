@@ -42,6 +42,8 @@ public class Listener: NSObject {
     var audioSession = AVAudioSession.sharedInstance()
     var inputNode:AVAudioInputNode//microphone node
     var filter:AVAudioUnitEQ//lowpass filter
+    
+    //not used-> maybe use to filter out high noise for ML algorithm
     var lowPassFreq:Int
     
     //microphone harware params
@@ -92,6 +94,8 @@ public class Listener: NSObject {
      initialize audio via audio session and setting up audio graph pipline
      */
     public func initializeAudio() {
+        print("initializing listener with folllowing parameters...")
+        printParams()
         //audio session setup (lower level mic config)
           do {
                 try audioSession.setActive(true)
@@ -273,14 +277,15 @@ public class Listener: NSObject {
         
         let lowerBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)
         let upperBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)
-        print(indexToFrequency(N:n,index:self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count)))
         let crest:Int = self.geMaxIndex(array: &roots, lowerBound:lowerBound, upperBound:upperBound)
+
+        print(indexToFrequency(N:n,index:self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count)))
         print(indexToFrequency(N: n, index: crest))
-        let widthForSlope = self.frequencyToIndex(N: n, freq: slopeWidth)
+        let indexWidthForSlope = self.frequencyToIndex(N: n, freq: slopeWidth)
         
-        let frontSlope:Float = calculateSlope(index: crest, width: widthForSlope, array: &roots)
-        let backSlope:Float = calculateSlope(index: crest, width: -widthForSlope, array: &roots)
-        return false
+        let frontSlope:Float = calculateSlope(index: crest, width: indexWidthForSlope, array: &roots)
+        let backSlope:Float = calculateSlope(index: crest, width: -indexWidthForSlope, array: &roots)
+        return true
     }
     
     
@@ -307,6 +312,26 @@ public class Listener: NSObject {
             }
         }
         return index
+    }
+    
+    //debug - TODO: make toString method
+    func printParams() {
+        print("target frequency: " + String(targetFrequncy))
+        print("target slope: " + String(targetSlope))
+        print("slope Width: " + String(slopeWidth))
+        print("target frequency threshold: " + String(targetFrequncyThreshold))
+        print("low pass frequency: " + String(lowPassFreq))
+        print("buffer length: " + String(n))
+        print("sound Clip Duration: " + String(soundClipDuration))
+        print("mic sampling rate: " + String(samplingRate))
+        print("is fft filter turned on?: " + (grabAllSoundRecordings ? "NO" : "YES"))
+
+
+        
+
+
+
+
     }
     
 }

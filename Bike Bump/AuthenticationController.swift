@@ -28,6 +28,7 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        //block if network is not connected- > in Future, allow local storage and push sound clips when eventually connected with network
         //callback to see if logged in
         //prevent loging in until server params are set
        FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
