@@ -10,6 +10,8 @@
 import UIKit
 import AVFoundation
 import Accelerate
+import AudioToolbox
+
 
 //callback protocol to update UI from audio events
 protocol AudioEvents:class {
@@ -42,13 +44,15 @@ public class Listener: NSObject {
     var filter:AVAudioUnitEQ//lowpass filter
     var lowPassFreq:Int
     
-    //debug
-    var player:AVAudioPlayerNode
-    
     //microphone harware params
     var samplingRate:Int //hz
+    
+    // bell detection alogrithm params
+    var slopeWidth:Int //hz
     var targetFrequncy:Int //hz
     var targetFrequncyThreshold:Int //hz
+    var targetSlope:Float
+    
     
     //queue to control concurrency problems
     let soundQueue:DispatchQueue = DispatchQueue(label: "com.example.audiofftqueue")
@@ -59,14 +63,18 @@ public class Listener: NSObject {
          targetFrequncyThreshold:Int,
          bufferLength:Int,
          lowPassFreq:Int,
-         grabAllSoundRecordings:Int) {
+         grabAllSoundRecordings:Int,
+         slopeWidth:Int,
+         targetSlope: Float) {
         
         self.samplingRate = samplingRate
         self.targetFrequncy = targetFrequncy
         self.targetFrequncyThreshold = targetFrequncyThreshold
+        self.slopeWidth = slopeWidth
         self.inputNode = audioEngine.inputNode!
         self.filter = AVAudioUnitEQ(numberOfBands:1)
         self.lowPassFreq = lowPassFreq
+        self.targetSlope = targetSlope
         
         self.n = NSInteger(bufferLength)
         self.n2 = vDSP_Length(bufferLength/2)
@@ -78,11 +86,13 @@ public class Listener: NSObject {
         self.currentSoundBuffers = []
         self.numBufferPerClip = Int(soundClipDuration*Double(samplingRate)/Double(bufferLength))
         
-        //debug
-        self.player = AVAudioPlayerNode()
     }
     
+    /**
+     initialize audio via audio session and setting up audio graph pipline
+     */
     public func initializeAudio() {
+        //audio session setup (lower level mic config)
           do {
                 try audioSession.setActive(true)
                 try audioSession.setCategory(AVAudioSessionCategoryRecord)
@@ -90,29 +100,26 @@ public class Listener: NSObject {
                 try audioSession.setPreferredInputNumberOfChannels(1)
                 try audioSession.setMode(AVAudioSessionModeMeasurement)
             }
-            //cancel recording if any problems
             catch {
-                print("something went wrong")
+                //cancel recording if any problems
+                print("something went wrong with audio setup")
                 return
             }
         
+            //higher level audio setup - pipeline
             self.setupFilter()
             self.audioEngine.attach(self.filter)
-
-
-            //debug
-            //setupPlayer()
-        
-            //keep track of how to control audio processing format -changing sample rate
             self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
         
+            //TODO: keep longer buffer, cut out needed buffer based on time stamp
         
-        
-        
-            //process audio - keep longer buffer, cut out needed buffer based on time stamp
+            //audio callback for FFT
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                     (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                     if(self.currentSoundBuffers.count >= self.numBufferPerClip && (self.grabAllSoundRecordings || self.detectBell(buffer: buffer))){
+                        
+                            //user feedback for bell
+                            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
                             //callback for UI
                             DispatchQueue.main.async() {
                                 self.delegate?.ringDetected()
@@ -123,14 +130,15 @@ public class Listener: NSObject {
                             let long:Double = LocationManager.sharedLocationManager.getLocation().coordinate.latitude
                             let curTime:String = LocationManager.sharedLocationManager.getCurrentTime()
                             let epoch:Int = LocationManager.sharedLocationManager.getEpoch()
+                        
                             //create wav file
                             let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                            //maybe send raw data to server, quicker, but more work on server side to package in file - > would have to be packaged through backend?
+                            //TODO: maybe send raw data to server, quicker, but more work on server side to package in file - > would have to be packaged through backend?
                             let filePath:String = base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"
                             let fileURL:URL = URL.init(fileURLWithPath: filePath)
-
+                        
                             self.soundQueue.sync {
-                                self.audioProcessingBlock(fileURL: fileURL)
+                                self.writeToFile(fileURL: fileURL)
                             }
                             //dealloc file so saved to mem before packagingand sending
                             //send files to server
@@ -141,16 +149,18 @@ public class Listener: NSObject {
                     }
                 }
             
-            //populated buffer with sound
+            //audio callback for populating buffer
             self.inputNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.inputNode.inputFormat(forBus: 0)){
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                     self.soundQueue.sync {
                         self.bufferSound(buffer: buffer)
                 }
             }
-
         }
     
+    /**
+        keeping running list of sound buffers in time domain    
+     */
     func bufferSound(buffer: AVAudioPCMBuffer) {
         if(self.currentSoundBuffers.count < self.numBufferPerClip){
             self.currentSoundBuffers.append(buffer)
@@ -161,7 +171,10 @@ public class Listener: NSObject {
         }
     }
     
-    func audioProcessingBlock(fileURL: URL) {
+    /**
+     push buffer to file and clear buffer
+     */
+    func writeToFile(fileURL: URL) {
         
         //merge buffers into files
         do {
@@ -176,15 +189,31 @@ public class Listener: NSObject {
             print("could not write file")
         }
     }
-
     
+    /**
+     return settings for writing audio files
+            if running with simulator on computer, mic chnannels need to be set to 2
+     */
+    private func audioFileSettings() -> Dictionary<String, Any> {
+        return [
+            AVSampleRateKey : samplingRate,
+            AVNumberOfChannelsKey : 1,
+            AVFormatIDKey : kAudioFormatLinearPCM
+        ]
+    }
     
+    /**
+     pre fft filter
+     */
     private func setupFilter(){
          filter.bands[0].filterType = AVAudioUnitEQFilterType.bandPass
          filter.bands[0].frequency = Float(targetFrequncy);
          filter.bands[0].bandwidth = 0.1
     }
-
+    
+    /**
+     start pulling audio through render thread    
+     */
     public func startListening() {
         //offload initialization so you can start and stop
         audioSession.requestRecordPermission({(permissionGranted: Bool) -> Void in
@@ -192,7 +221,6 @@ public class Listener: NSObject {
                 do {
                     try self.audioEngine.start()
                     self.fftSetup = vDSP_create_fftsetup(self.log_n, FFTRadix(kFFTRadix2))!
-                    //self.player.play()
                     print("started engine")
                 }
                 catch {
@@ -202,6 +230,9 @@ public class Listener: NSObject {
          })
     }
     
+    /**
+     stop pulling audio through render thread
+    */
     public func stopListening() {
         audioEngine.stop()
         currentSoundBuffers.removeAll()
@@ -214,10 +245,17 @@ public class Listener: NSObject {
         }
     }
     
+    
+    /**
+    are we returning data
+     */
     public func isListening() -> Bool {
         return self.audioEngine.isRunning
     }
     
+    /**
+     compute fft and evaluate frequency neighborhood to detect bell peaks
+     */
     private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
         // create vectors
         var tempReal : [Float] = [Float](repeating: 0.0, count: n)
@@ -233,78 +271,42 @@ public class Listener: NSObject {
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
         var roots:[Float] = fftMagnitudes.map {sqrtf($0)}
         
-        let lowerBound:Int = Int(Int(self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)))
-        let upperBound:Int = Int(Int(self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)))
-
-        //speed up
-        let crest:Int =  roots[max(lowerBound,0)..<min(upperBound,roots.count)].index(of: roots[lowerBound..<upperBound].max()!)!
-    
+        let lowerBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)
+        let upperBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)
+        print(indexToFrequency(N:n,index:self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count)))
+        let crest:Int = self.geMaxIndex(array: &roots, lowerBound:lowerBound, upperBound:upperBound)
+        print(indexToFrequency(N: n, index: crest))
+        let widthForSlope = self.frequencyToIndex(N: n, freq: slopeWidth)
         
-        let front:Float = calculateSlope(index: crest, width: 100, array: &roots)
-        let back:Float = calculateSlope(index: crest, width: -100, array: &roots)
-        
-        let maxIndex:Int = roots.index(of: roots.max()!)!
-        if indexToFrequency(N: n, index: maxIndex)>2500 && indexToFrequency(N: n, index: maxIndex) < 3500{
-            print("here")
-            print(front)
-            print(back)
-            print(crest)
-            print(upperBound)
-            print(lowerBound)
-            print(maxIndex)
-        }
-       
+        let frontSlope:Float = calculateSlope(index: crest, width: widthForSlope, array: &roots)
+        let backSlope:Float = calculateSlope(index: crest, width: -widthForSlope, array: &roots)
         return false
     }
     
-    private func audioFileSettings() -> Dictionary<String, Any> {
-        return [
-            AVSampleRateKey : samplingRate,
-            AVNumberOfChannelsKey : 1,
-            AVFormatIDKey : kAudioFormatLinearPCM
-        ]
-    }
     
     private func indexToFrequency(N:Int, index:Int) -> Double {
         return Double(index)*Double(self.samplingRate)/Double(N)
     }
     
-    private func frequencyToIndex(N:Int, freq:Int) -> Double {
-        return Double(freq)*Double(N)/Double(self.samplingRate)
+    private func frequencyToIndex(N:Int, freq:Int) -> Int {
+        return Int(Double(freq)*Double(N)/Double(self.samplingRate))
     }
     
     private func calculateSlope(index:Int, width:Int, array: inout [Float]) -> Float {
-        //average 3 points as jank way of damping noise
+        //average 3 points as naive way of damping noise
         return (array[index]-(array[min(max(0,index+width-3),array.count-1)..<max(0,min(array.count-1,(index+width+4)))].reduce(0,+)))/Float(width)
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //debug
-    private func setupPlayer() {
-        audioEngine.attach(player)
-        var files:[AVAudioFile] = []
-        do {
-            files = try FileManager.default.contentsOfDirectory(at: Bundle.main.bundleURL
-                , includingPropertiesForKeys: nil, options: []).filter() {$0.absoluteString.range(of:"Ding") != nil}.map() { try AVAudioFile.init(forReading: $0)}
+    private func geMaxIndex(array: inout [Float], lowerBound:Int, upperBound:Int) -> Int {
+        var index:Int = 0
+        var maxValue:Float = 0
+        for i in max(lowerBound,0)..<min(upperBound,array.count-1) {
+            if array[i] > maxValue {
+                maxValue = array[i]
+                index = i
+            }
         }
-        catch{
-            print("No")
-        }
-       print(files)
-        for file in files {
-            player.scheduleFile(file, at: nil, completionHandler: {print("played" + file.url.absoluteString)})
-        }
-         self.audioEngine.connect(player, to: self.filter, format:files[0].fileFormat)
+        return index
     }
-    
     
 }
