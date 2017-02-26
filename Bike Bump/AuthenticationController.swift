@@ -16,10 +16,12 @@ import FirebaseRemoteConfig
 
 class AuthenticationController: UIViewController, UITextFieldDelegate {
     
+    //UI
     @IBOutlet weak var user: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUp: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,30 +32,27 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //block if network is not connected- > in Future, allow local storage and push sound clips when eventually connected with network
-        //callback to see if logged in
-        //prevent loging in until server params are set
-        let isConnected = FIRDatabase.database().reference(withPath: ".info/connected")
-        isConnected.observe(.value, with: { snapshot in
-            if let connected = snapshot.value as? Bool , connected {
-                //pull Firebase info
-                FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
-                    (status, error) in
-                    print("params fetched")
+        //periodic alert for no network connection
+        let networkChecker = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(networkAlert), userInfo: nil, repeats: true)
+        
+        let connectedRef = FIRDatabase.database().reference(withPath: ".info/connected")
+        connectedRef.observe(.value, with: { (connected) in
+            //connected!
+            if let boolean = connected.value as? Bool, boolean == true {
+                networkChecker.invalidate()
+                //pull Firebase params, requires internet connection: WARNING, change expration to larger number in production
                     FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
                         if user != nil {
-                            self.performSegue(withIdentifier: "main", sender: self)
+                            FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
+                                (status, error) in
+                                print("params fetched")
+                                self.performSegue(withIdentifier: "main", sender: self)
                         }
-                    }
                 }
-
-            } else {
-                let alert = UIAlertController(title: "Network connection", message: "Network connection required. Please connect to network.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+            }
             }
         })
-          }
+        }
 
    override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -80,6 +79,13 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
+    }
+    
+    func networkAlert() {
+        let alert = UIAlertController(title: "Network connection", message: "Network connection required. Please connect to network.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+
     }
 }
 
