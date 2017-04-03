@@ -27,7 +27,7 @@ class setupViewController: UIViewController {
     func didPressListenBell() {
         
         let defaults = UserDefaults.standard
-        defaults.set(freq, forKey: Constants.bikeBellFreq)
+//        defaults.set(freq, forKey: Constants.bikeBellFreq)
     }
     
     func returnToHome() {

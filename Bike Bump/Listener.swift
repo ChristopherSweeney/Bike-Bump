@@ -15,7 +15,7 @@ import AudioToolbox
 
 //callback protocol to update UI from audio events
 protocol AudioEvents:class {
-    func ringDetected()
+    func ringDetected(centerFreq:Int)
 }
 
 /* The Listener object buffers mic input and sends a sound clip to the server tied with location and time, if a central frequency is heard at a certain frequency post fft */
@@ -118,7 +118,18 @@ public class Listener: NSObject {
             self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
         
             //TODO: keep longer buffer, cut out needed buffer based on time stamp
-        
+    }
+    
+    public func installSetUpTap() {
+        self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
+            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                if(self.getBellFreq(buffer: buffer)) != 0 {
+                    self.delegate?.ringDetected(centerFreq: 0)
+                }
+        }
+    }
+    
+    public func installTaps() {
             //audio callback for FFT
             self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
                     (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
@@ -128,7 +139,7 @@ public class Listener: NSObject {
                             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
                             //callback for UI
                             DispatchQueue.main.async() {
-                                self.delegate?.ringDetected()
+                                self.delegate?.ringDetected(centerFreq: 0)
                             }
                   
                             //get enviornment info
@@ -139,6 +150,7 @@ public class Listener: NSObject {
                         
                             //create wav file
                             let base:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                        
                             //TODO: maybe send raw data to server, quicker, but more work on server side to package in file - > would have to be packaged through backend?
                             let filePath:String = base + "/Audio_Sample_" + curTime + "_lat=\(lat)_long=\(long).wav"
                             let fileURL:URL = URL.init(fileURLWithPath: filePath)
@@ -160,8 +172,8 @@ public class Listener: NSObject {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                     self.soundQueue.sync {
                         self.bufferSound(buffer: buffer)
+                    }
                 }
-            }
         }
     
     /**
@@ -251,18 +263,14 @@ public class Listener: NSObject {
         }
     }
     
-    
     /**
     are we returning data
      */
     public func isListening() -> Bool {
         return self.audioEngine.isRunning
     }
-    
-    /**
-     compute fft and evaluate frequency neighborhood to detect bell peaks
-     */
-    private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
+        
+    private func fft(buffer:AVAudioPCMBuffer) -> [Float] {
         // create vectors
         var tempReal : [Float] = [Float](repeating: 0.0, count: n)
         var tempImag : [Float] = [Float](repeating: 0.0, count: n)
@@ -275,7 +283,25 @@ public class Listener: NSObject {
         //package results
         var fftMagnitudes = [Float](repeating:0.0, count:Int(n))
         vDSP_zvmags(&splitComplex, 1, &fftMagnitudes, 1, vDSP_Length(n));
-        var roots:[Float] = fftMagnitudes.map {sqrtf($0)}
+        
+        return fftMagnitudes.map {sqrtf($0)}
+    }
+    
+    private func getBellFreq(buffer:AVAudioPCMBuffer) -> Int {
+        let roots:[Float] = self.fft(buffer: buffer)
+        let maxFreq = self.indexToFrequency(N: n, index:roots.index(of:roots.max()!)!)
+        if  maxFreq > 1000 {
+            return Int(maxFreq)
+        }
+        return 0
+    }
+    
+    /**
+    evaluate frequency neighborhood to detect bell peaks
+     */
+    private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
+       
+        var roots:[Float] = self.fft(buffer: buffer)
         
         let lowerBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)
         let upperBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)
@@ -327,7 +353,6 @@ public class Listener: NSObject {
         print("sound Clip Duration: " + String(soundClipDuration))
         print("mic sampling rate: " + String(samplingRate))
         print("is fft filter turned on?: " + (grabAllSoundRecordings ? "NO" : "YES"))
-
     }
     
 }

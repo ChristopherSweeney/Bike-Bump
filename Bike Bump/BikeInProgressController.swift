@@ -32,6 +32,29 @@ class BikeInProgressController: UIViewController, AudioEvents {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.listener = createAudioEngineWithRemoteParams()
+        
+        //setup audio
+        listener?.initializeAudio()
+        
+        //setup processing graph
+        listener?.installTaps()
+        
+        //setup outlit for callback to UI from listener class
+        listener?.delegate = self
+        
+        //setup UI
+        isRideInProgress = false
+        rideButton.frame = CGRect(x: rideButton.frame.origin.x/2, y: rideButton.frame.origin.y, width: 300, height: 300)
+        rideButton.layer.cornerRadius = rideButton.bounds.size.width * 0.5
+        rideButton.addTarget(self, action: #selector(self.rideAction), for:  UIControlEvents.touchUpInside)
+        rideButton.addTarget(self, action: #selector(self.didTouch), for:  UIControlEvents.touchDown)
+        rideButton.addTarget(self, action: #selector(self.didLift), for:  UIControlEvents.touchUpInside)
+        settings.addTarget(self, action: #selector(self.settingsPage), for: UIControlEvents.touchUpInside)
+
+    }
+    
+    func createAudioEngineWithRemoteParams() -> Listener {
         //get firebase info
         let user = FIRAuth.auth()?.currentUser
         if let name = user?.displayName {
@@ -77,24 +100,9 @@ class BikeInProgressController: UIViewController, AudioEvents {
         if targetSlope <= 0 {
             targetSlope = 1
         }
+        
         //initialize audio listening pipeline
-        self.listener = Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: targetFrequencyThreshold, bufferLength: bufferLength, lowPassFreq: lowPassFreq, grabAllSoundRecordings :grabAllSoundRecordings, slopeWidth: slopeWidth, targetSlope:targetSlope)
-        
-        //setup audio processing graph
-        listener?.initializeAudio()
-        
-        //setup outlit for callback to UI from listener class
-        listener?.delegate = self
-        
-        //setup UI
-        isRideInProgress = false
-        rideButton.frame = CGRect(x: rideButton.frame.origin.x/2, y: rideButton.frame.origin.y, width: 300, height: 300)
-        rideButton.layer.cornerRadius = rideButton.bounds.size.width * 0.5
-        rideButton.addTarget(self, action: #selector(self.rideAction), for:  UIControlEvents.touchUpInside)
-        rideButton.addTarget(self, action: #selector(self.didTouch), for:  UIControlEvents.touchDown)
-        rideButton.addTarget(self, action: #selector(self.didLift), for:  UIControlEvents.touchUpInside)
-        settings.addTarget(self, action: #selector(self.settingsPage), for: UIControlEvents.touchUpInside)
-
+        return Listener(samplingRate: samplingRate, soundClipDuration: Double(soundClipDuration),targetFrequncy: targetFreq, targetFrequncyThreshold: targetFrequencyThreshold, bufferLength: bufferLength, lowPassFreq: lowPassFreq, grabAllSoundRecordings :grabAllSoundRecordings, slopeWidth: slopeWidth, targetSlope:targetSlope)
     }
     
     override func didReceiveMemoryWarning() {
@@ -146,7 +154,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
 
     //delegate methods for UI triggers
     
-    func ringDetected() {
+    func ringDetected(centerFreq:Int) {
         self.rideButton.backgroundColor = UIColor.yellow
         let fadeTime = DispatchTime.now() + .seconds(1)
         DispatchQueue.main.asyncAfter(deadline: fadeTime) {
