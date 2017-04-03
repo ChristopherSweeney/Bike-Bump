@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3E8CF4317051371129103113 /* Pods_Bike_BumpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 767DA7A288B78CF231DEED9A /* Pods_Bike_BumpUITests.framework */; };
 		522FEBF75AAB7A1D305E3E8C /* Pods_Bike_BumpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89F5E8C4CE16AD0472B91E80 /* Pods_Bike_BumpTests.framework */; };
+		BB1AD3BF1E92992A005681E6 /* setupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1AD3BE1E92992A005681E6 /* setupViewController.swift */; };
 		BB340FAE1E31D8E4003C084E /* BikeInProgressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */; };
 		BB42C83E1E273CD600BB4024 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C83D1E273CD600BB4024 /* AppDelegate.swift */; };
 		BB42C8401E273CD600BB4024 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42C83F1E273CD600BB4024 /* AuthenticationController.swift */; };
@@ -70,6 +71,7 @@
 		A5BFE40DCBF8DEABD2AB7E37 /* Pods-Bike Bump.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike Bump.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump.debug.xcconfig"; sourceTree = "<group>"; };
 		AF70D63002D4258CBFC01B33 /* Pods-Bike Bump.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bike Bump.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bike Bump/Pods-Bike Bump.release.xcconfig"; sourceTree = "<group>"; };
 		BB020BC81E33F64B0038A03C /* Bike Bump.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bike Bump.entitlements"; sourceTree = "<group>"; };
+		BB1AD3BE1E92992A005681E6 /* setupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupViewController.swift; sourceTree = "<group>"; };
 		BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BikeInProgressController.swift; sourceTree = "<group>"; };
 		BB42C83A1E273CD600BB4024 /* Bike Bump.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bike Bump.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB42C83D1E273CD600BB4024 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 			children = (
 				BB340FAD1E31D8E4003C084E /* BikeInProgressController.swift */,
 				BB42C83F1E273CD600BB4024 /* AuthenticationController.swift */,
+				BB1AD3BE1E92992A005681E6 /* setupViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -549,6 +552,7 @@
 				BB42C8741E2C281400BB4024 /* LocationManager.swift in Sources */,
 				BB42C83E1E273CD600BB4024 /* AppDelegate.swift in Sources */,
 				BBB771CA1E2EA2710082A2DF /* Listener.swift in Sources */,
+				BB1AD3BF1E92992A005681E6 /* setupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
