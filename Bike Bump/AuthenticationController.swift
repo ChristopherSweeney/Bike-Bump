@@ -46,7 +46,15 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
                             FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
                                 (status, error) in
                                 print("params fetched")
-                                self.performSegue(withIdentifier: "main", sender: self)
+
+                                let defaults = UserDefaults.standard
+                                if defaults.string(forKey: Constants.bikeBellFreq) != nil {
+                                    self.performSegue(withIdentifier: "main", sender: self)
+                                }
+                                else {
+                                    self.performSegue(withIdentifier: "initSettings", sender: self)
+                                }
+                                
                         }
                 }
             }

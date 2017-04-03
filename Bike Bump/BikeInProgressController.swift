@@ -17,6 +17,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     var isRideInProgress:Bool = false
     
     //UI elements
+    @IBOutlet weak var settings: UIButton!
     @IBOutlet weak var inProgressDescription: UITextField!
     @IBOutlet weak var rideInProgress: UIActivityIndicatorView!
     @IBOutlet weak var welcomeField: UITextField!
@@ -92,6 +93,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
         rideButton.addTarget(self, action: #selector(self.rideAction), for:  UIControlEvents.touchUpInside)
         rideButton.addTarget(self, action: #selector(self.didTouch), for:  UIControlEvents.touchDown)
         rideButton.addTarget(self, action: #selector(self.didLift), for:  UIControlEvents.touchUpInside)
+        settings.addTarget(self, action: #selector(self.settingsPage), for: UIControlEvents.touchUpInside)
 
     }
     
@@ -137,6 +139,11 @@ class BikeInProgressController: UIViewController, AudioEvents {
         })
     }
     
+    func settingsPage() {
+        self.performSegue(withIdentifier: "settingsPage", sender: self)
+    }
+
+
     //delegate methods for UI triggers
     
     func ringDetected() {

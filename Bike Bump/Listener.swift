@@ -328,12 +328,6 @@ public class Listener: NSObject {
         print("mic sampling rate: " + String(samplingRate))
         print("is fft filter turned on?: " + (grabAllSoundRecordings ? "NO" : "YES"))
 
-
-        
-
-
-
-
     }
     
 }

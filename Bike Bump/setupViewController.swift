@@ -10,9 +10,13 @@ import UIKit
 
 class setupViewController: UIViewController {
 
+    @IBOutlet weak var returnHome: UIButton!
+    @IBOutlet weak var listenBell: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        listenBell.addTarget(self, action: #selector(self.didPressListenBell), for: UIControlEvents.touchUpInside)
+        returnHome.addTarget(self, action: #selector(self.returnToHome), for: UIControlEvents.touchUpInside)
     }
 
     override func didReceiveMemoryWarning() {
@@ -20,7 +24,15 @@ class setupViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    func didPressListenBell() {
+        
+        let defaults = UserDefaults.standard
+        defaults.set(freq, forKey: Constants.bikeBellFreq)
+    }
+    
+    func returnToHome() {
+        self.performSegue(withIdentifier: "returnHome", sender: self)
+    }
     /*
     // MARK: - Navigation
 

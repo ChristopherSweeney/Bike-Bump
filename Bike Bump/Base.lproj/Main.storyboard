@@ -111,6 +111,7 @@
                         <outlet property="signUp" destination="TJf-1z-bs6" id="S76-Y9-SxU"/>
                         <outlet property="user" destination="lbx-Fu-qS4" id="0Jn-zL-Bch"/>
                         <segue destination="RD0-4s-YMp" kind="presentation" identifier="main" id="SMQ-vw-MKi"/>
+                        <segue destination="zsi-RR-kc5" kind="presentation" identifier="initSettings" id="46s-QY-HxW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -154,13 +155,25 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ride in Progress" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UX8-wb-qXa">
-                                <rect key="frame" x="120" y="567" width="135" height="67"/>
+                                <rect key="frame" x="120" y="477" width="135" height="67"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="39"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrg-oK-aZO">
+                                <rect key="frame" x="109" y="622" width="157" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.022189394509999998" green="0.77154568219999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="24"/>
+                                <state key="normal" title="settings">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -168,7 +181,9 @@
                         <outlet property="inProgressDescription" destination="UX8-wb-qXa" id="UqV-Qa-MAY"/>
                         <outlet property="rideButton" destination="3OU-wb-D9E" id="UaS-Cj-ZT0"/>
                         <outlet property="rideInProgress" destination="JmO-hY-egn" id="dcY-Xt-pum"/>
+                        <outlet property="settings" destination="Rrg-oK-aZO" id="OUy-uk-euS"/>
                         <outlet property="welcomeField" destination="X0l-5i-xhD" id="FiE-hy-r0K"/>
+                        <segue destination="zsi-RR-kc5" kind="presentation" identifier="settingsPage" id="pQM-zX-EEq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eFc-1i-SBt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -186,12 +201,92 @@
                     <view key="view" contentMode="scaleToFill" id="F1U-bg-Zgx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Settings" textAlignment="center" minimumFontSize="50" translatesAutoresizingMaskIntoConstraints="NO" id="GMR-sq-aJf">
+                                <rect key="frame" x="73" y="28" width="256" height="115"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="115" id="ofl-qj-v91"/>
+                                </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="50"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qdp-vc-pdY">
+                                <rect key="frame" x="116" y="141" width="170" height="81"/>
+                                <color key="backgroundColor" red="0.35772203330000002" green="1" blue="0.4357535803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="24"/>
+                                <state key="normal" title="Listen to Bell">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1uP-jp-cfi">
+                                <rect key="frame" x="70" y="577" width="235" height="38"/>
+                                <color key="backgroundColor" red="0.99160850050000005" green="0.92318520770000001" blue="0.42443481090000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="xaO-Oa-9MR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                                <state key="normal" title="Return To Home">
+                                    <color key="titleColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdP-9G-bRe">
+                                <rect key="frame" x="70" y="577" width="235" height="38"/>
+                                <color key="backgroundColor" red="0.99160850050000005" green="0.92318520770000001" blue="0.42443481090000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="4pb-0a-NWE"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                                <state key="normal" title="Return To Home">
+                                    <color key="titleColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qdp-vc-pdY" firstAttribute="top" secondItem="96h-wz-sLB" secondAttribute="bottom" constant="121" id="24v-YY-PeR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="GMR-sq-aJf" secondAttribute="trailing" constant="30" id="2MT-Hc-ifx"/>
+                            <constraint firstItem="GMR-sq-aJf" firstAttribute="leading" secondItem="F1U-bg-Zgx" secondAttribute="leadingMargin" constant="57" id="K5j-6y-ooI"/>
+                            <constraint firstItem="1uP-jp-cfi" firstAttribute="leading" secondItem="F1U-bg-Zgx" secondAttribute="leadingMargin" constant="54" id="MA3-Gg-ZzG"/>
+                            <constraint firstItem="xdP-9G-bRe" firstAttribute="trailing" secondItem="1uP-jp-cfi" secondAttribute="trailing" id="R8M-6r-bqA"/>
+                            <constraint firstItem="EWy-Ky-azA" firstAttribute="top" secondItem="qdp-vc-pdY" secondAttribute="bottom" constant="445" id="S4b-lX-bs0"/>
+                            <constraint firstItem="GMR-sq-aJf" firstAttribute="centerX" secondItem="qdp-vc-pdY" secondAttribute="centerX" id="cGJ-Tz-xSt"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qdp-vc-pdY" secondAttribute="trailing" constant="73" id="hdI-uz-wOQ"/>
+                            <constraint firstItem="GMR-sq-aJf" firstAttribute="top" secondItem="96h-wz-sLB" secondAttribute="bottom" constant="8" symbolic="YES" id="kcd-5V-sRW"/>
+                            <constraint firstItem="xdP-9G-bRe" firstAttribute="leading" secondItem="1uP-jp-cfi" secondAttribute="leading" id="ru6-EW-GFe"/>
+                            <constraint firstItem="xdP-9G-bRe" firstAttribute="baseline" secondItem="1uP-jp-cfi" secondAttribute="baseline" id="s0n-kA-Rnd"/>
+                            <constraint firstItem="EWy-Ky-azA" firstAttribute="top" secondItem="1uP-jp-cfi" secondAttribute="bottom" constant="52" id="sic-Yg-YR2"/>
+                            <constraint firstItem="1uP-jp-cfi" firstAttribute="trailing" secondItem="GMR-sq-aJf" secondAttribute="trailing" constant="-24" id="v3N-ts-MV1"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="listenBell" destination="qdp-vc-pdY" id="1Xn-Mg-CHp"/>
+                        <outlet property="returnHome" destination="xdP-9G-bRe" id="Xc4-tH-wLd"/>
+                        <segue destination="RD0-4s-YMp" kind="presentation" identifier="returnHome" id="L8N-Ae-oTS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sIH-Ep-ncQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1838" y="160"/>
+            <point key="canvasLocation" x="137" y="966"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="46s-QY-HxW"/>
+        <segue reference="L8N-Ae-oTS"/>
+    </inferredMetricsTieBreakers>
 </document>
