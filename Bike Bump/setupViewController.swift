@@ -41,6 +41,7 @@ class setupViewController: UIViewController,AudioEvents {
     }
     
     func returnToHome() {
+        BikeInProgressController.setupListener?.stopListening()
         self.performSegue(withIdentifier: "returnHome", sender: self)
     }
     
