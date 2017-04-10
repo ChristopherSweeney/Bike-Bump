@@ -60,7 +60,7 @@ public class Listener: NSObject {
     
     //queue to control concurrency problems
     let soundQueue:DispatchQueue = DispatchQueue(label: "com.example.audiofftqueue")
-
+    
     init(samplingRate:Int,
          soundClipDuration:Double,
          targetFrequncy:Int,
@@ -121,10 +121,11 @@ public class Listener: NSObject {
     }
     
     public func installSetUpTap() {
-        self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n), format: self.filter.inputFormat(forBus: 0)) {
+        self.filter.installTap(onBus: 0, bufferSize: 8192 , format: self.filter.inputFormat(forBus: 0)) {
             (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                if(self.getBellFreq(buffer: buffer)) != 0 {
-                    self.delegate?.ringDetected(centerFreq: 0)
+            let freq:Int = self.getBellFreq(buffer: buffer)
+                if(freq > 500) {//random constant for now fnd min freq
+                    self.delegate?.ringDetected(centerFreq: freq)
                 }
         }
     }
@@ -290,10 +291,8 @@ public class Listener: NSObject {
     private func getBellFreq(buffer:AVAudioPCMBuffer) -> Int {
         let roots:[Float] = self.fft(buffer: buffer)
         let maxFreq = self.indexToFrequency(N: n, index:roots.index(of:roots.max()!)!)
-        if  maxFreq > 1000 {
-            return Int(maxFreq)
-        }
-        return 0
+       
+        return Int(maxFreq)
     }
     
     /**

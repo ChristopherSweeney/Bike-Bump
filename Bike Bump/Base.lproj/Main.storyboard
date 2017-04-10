@@ -111,7 +111,6 @@
                         <outlet property="signUp" destination="TJf-1z-bs6" id="S76-Y9-SxU"/>
                         <outlet property="user" destination="lbx-Fu-qS4" id="0Jn-zL-Bch"/>
                         <segue destination="RD0-4s-YMp" kind="presentation" identifier="main" id="SMQ-vw-MKi"/>
-                        <segue destination="zsi-RR-kc5" kind="presentation" identifier="initSettings" id="46s-QY-HxW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -154,14 +153,6 @@
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="36"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ride in Progress" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UX8-wb-qXa">
-                                <rect key="frame" x="120" y="477" width="135" height="67"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="39"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrg-oK-aZO">
                                 <rect key="frame" x="109" y="622" width="157" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -174,6 +165,14 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
+                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ride in Progress" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UX8-wb-qXa">
+                                <rect key="frame" x="120" y="477" width="135" height="137"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="39"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -277,7 +276,7 @@
                     <connections>
                         <outlet property="listenBell" destination="qdp-vc-pdY" id="1Xn-Mg-CHp"/>
                         <outlet property="returnHome" destination="xdP-9G-bRe" id="Xc4-tH-wLd"/>
-                        <segue destination="RD0-4s-YMp" kind="presentation" identifier="returnHome" id="L8N-Ae-oTS"/>
+                        <segue destination="RD0-4s-YMp" kind="presentation" identifier="returnHome" modalTransitionStyle="crossDissolve" id="L8N-Ae-oTS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sIH-Ep-ncQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -286,7 +285,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="46s-QY-HxW"/>
         <segue reference="L8N-Ae-oTS"/>
     </inferredMetricsTieBreakers>
 </document>

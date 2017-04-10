@@ -8,15 +8,17 @@
 
 import UIKit
 
-class setupViewController: UIViewController {
+class setupViewController: UIViewController,AudioEvents {
 
     @IBOutlet weak var returnHome: UIButton!
     @IBOutlet weak var listenBell: UIButton!
+    //make factory singleton in listener
     
     override func viewDidLoad() {
         super.viewDidLoad()
         listenBell.addTarget(self, action: #selector(self.didPressListenBell), for: UIControlEvents.touchUpInside)
         returnHome.addTarget(self, action: #selector(self.returnToHome), for: UIControlEvents.touchUpInside)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,13 +28,37 @@ class setupViewController: UIViewController {
     
     func didPressListenBell() {
         
-        let defaults = UserDefaults.standard
-//        defaults.set(freq, forKey: Constants.bikeBellFreq)
+        BikeInProgressController.listener = BikeInProgressController.createAudioEngineWithRemoteParams()
+        //setup audio
+        
+        BikeInProgressController.setupListener?.delegate = self
+        
+        BikeInProgressController.setupListener?.startListening()
+        
+        self.listenBell.backgroundColor = UIColor.red
+
+        
     }
     
     func returnToHome() {
         self.performSegue(withIdentifier: "returnHome", sender: self)
     }
+    
+    
+    func ringDetected(centerFreq:Int) {
+        self.listenBell.backgroundColor = UIColor.yellow
+        let fadeTime = DispatchTime.now() + .seconds(1)
+        DispatchQueue.main.asyncAfter(deadline: fadeTime) {
+            self.listenBell.backgroundColor = UIColor.green
+        }
+        let defaults = UserDefaults.standard
+        defaults.set(centerFreq, forKey: Constants.bikeBellFreq)
+       
+        BikeInProgressController.listener?.stopListening()
+        self.returnToHome()
+    }
+
+    
     /*
     // MARK: - Navigation
 

@@ -13,6 +13,10 @@ import FirebaseAuth
 //TODO add bike bell detetion call back
 class BikeInProgressController: UIViewController, AudioEvents {
     
+    //singleton object to encapsulate listening functionallity
+    static var listener:Listener?
+    static var setupListener:Listener?
+    
     //state
     var isRideInProgress:Bool = false
     
@@ -24,24 +28,40 @@ class BikeInProgressController: UIViewController, AudioEvents {
     @IBOutlet weak var rideButton: UIButton!
     
     //firebase
-    var param:FIRRemoteConfig?
-    
-    //object to encapsulate listening functionallity
-    var listener:Listener?
-    
+    //static listener persists while object state reloads, need to co
     override func viewDidLoad() {
         super.viewDidLoad()
+        //dont setup every time, navigation popup controller?
+        let user = FIRAuth.auth()?.currentUser
+        if let name = user?.displayName {
+            self.welcomeField.text = "Welcome " + name
+        }
         
-        self.listener = createAudioEngineWithRemoteParams()
+        BikeInProgressController.setupListener = BikeInProgressController.createAudioEngineWithRemoteParams()
         
         //setup audio
-        listener?.initializeAudio()
+        BikeInProgressController.setupListener?.initializeAudio()
         
         //setup processing graph
-        listener?.installTaps()
+        BikeInProgressController.setupListener?.installSetUpTap()
+        
+
+        
+        let defaults = UserDefaults.standard
+        if defaults.string(forKey: Constants.bikeBellFreq) == nil {
+            self.performSegue(withIdentifier: "settingsPage", sender: self)
+        }
+      
+        BikeInProgressController.listener = BikeInProgressController.createAudioEngineWithRemoteParams()
+        
+        //setup audio
+        BikeInProgressController.listener?.initializeAudio()
+        
+        //setup processing graph
+        BikeInProgressController.listener?.installTaps()
         
         //setup outlit for callback to UI from listener class
-        listener?.delegate = self
+        BikeInProgressController.listener?.delegate = self
         
         //setup UI
         isRideInProgress = false
@@ -54,13 +74,9 @@ class BikeInProgressController: UIViewController, AudioEvents {
 
     }
     
-    func createAudioEngineWithRemoteParams() -> Listener {
+    static func createAudioEngineWithRemoteParams() -> Listener {
         //get firebase info
-        let user = FIRAuth.auth()?.currentUser
-        if let name = user?.displayName {
-            self.welcomeField.text = "Welcome " + name
-        }
-        param = FIRRemoteConfig.remoteConfig()
+        let param:FIRRemoteConfig? = FIRRemoteConfig.remoteConfig()
         param!.activateFetched()
         
         //get server audio params
@@ -112,24 +128,30 @@ class BikeInProgressController: UIViewController, AudioEvents {
     
     func rideAction() {
         
-        if isRideInProgress {
-            isRideInProgress = false
-            listener?.stopListening()
-            rideButton.setTitle("Start Ride", for: UIControlState.normal)
-            rideButton.backgroundColor = UIColor.green
-            rideInProgress.isHidden = true
-            rideInProgress.stopAnimating()
-            inProgressDescription.isHidden = true
-            isRideInProgress = false
+        let defaults = UserDefaults.standard
+        if defaults.string(forKey: Constants.bikeBellFreq) == nil {
+            self.performSegue(withIdentifier: "settingsPage", sender: self)
         }
-        else {
-            isRideInProgress = true
-            listener?.startListening()
-            rideButton.setTitle("End Ride", for: UIControlState.normal)
-            rideButton.backgroundColor = UIColor.red
-            rideInProgress.isHidden = false
-            rideInProgress.startAnimating()
-            inProgressDescription.isHidden = false
+        else{
+            if isRideInProgress {
+                isRideInProgress = false
+                BikeInProgressController.listener?.stopListening()
+                rideButton.setTitle("Start Ride", for: UIControlState.normal)
+                rideButton.backgroundColor = UIColor.green
+                rideInProgress.isHidden = true
+                rideInProgress.stopAnimating()
+                inProgressDescription.isHidden = true
+                isRideInProgress = false
+            }
+            else {
+                isRideInProgress = true
+                BikeInProgressController.listener?.startListening()
+                rideButton.setTitle("End Ride", for: UIControlState.normal)
+                rideButton.backgroundColor = UIColor.red
+                rideInProgress.isHidden = false
+                rideInProgress.startAnimating()
+                inProgressDescription.isHidden = false
+            }
         }
     }
     
@@ -158,7 +180,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
         self.rideButton.backgroundColor = UIColor.yellow
         let fadeTime = DispatchTime.now() + .seconds(1)
         DispatchQueue.main.asyncAfter(deadline: fadeTime) {
-            if (self.listener?.isListening())!{
+            if (BikeInProgressController.listener?.isListening())!{
                 self.rideButton.backgroundColor = UIColor.red
             }
             else {

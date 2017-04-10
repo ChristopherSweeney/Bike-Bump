@@ -5,6 +5,7 @@
 //  Created by Chris Sweeney on 1/11/17.
 //  Copyright © 2017 Chris Sweeney. All rights reserved.
 //
+
 import FirebaseAuth
 import FirebaseCore
 import FirebaseDatabase
@@ -34,7 +35,7 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         //periodic alert for no network connection
         let networkChecker = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(networkAlert), userInfo: nil, repeats: true)
-        
+
         let connectedRef = FIRDatabase.database().reference(withPath: ".info/connected")
         connectedRef.observe(.value, with: { (connected) in
             //connected!
@@ -46,14 +47,7 @@ class AuthenticationController: UIViewController, UITextFieldDelegate {
                             FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: 0) {
                                 (status, error) in
                                 print("params fetched")
-
-                                let defaults = UserDefaults.standard
-                                if defaults.string(forKey: Constants.bikeBellFreq) != nil {
-                                    self.performSegue(withIdentifier: "main", sender: self)
-                                }
-                                else {
-                                    self.performSegue(withIdentifier: "initSettings", sender: self)
-                                }
+                                self.performSegue(withIdentifier: "main", sender: self)
                                 
                         }
                 }
