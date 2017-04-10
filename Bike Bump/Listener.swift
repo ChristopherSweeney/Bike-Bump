@@ -124,7 +124,8 @@ public class Listener: NSObject {
         self.filter.installTap(onBus: 0, bufferSize: 8192 , format: self.filter.inputFormat(forBus: 0)) {
             (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
             let freq:Int = self.getBellFreq(buffer: buffer)
-                if(freq > 500) {//random constant for now fnd min freq
+            print(freq)
+                if(freq > 500  && freq < 8000) {//random constant for now fnd min freq
                     self.delegate?.ringDetected(centerFreq: freq)
                 }
         }
@@ -299,9 +300,10 @@ public class Listener: NSObject {
     evaluate frequency neighborhood to detect bell peaks
      */
     private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
-       
+        let defaults = UserDefaults.standard
+
         var roots:[Float] = self.fft(buffer: buffer)
-        
+        self.targetFrequncy = Int(defaults.string(forKey: Constants.bikeBellFreq)!)!
         let lowerBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)
         let upperBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)
         let crest:Int = self.geMaxIndex(array: &roots, lowerBound:lowerBound, upperBound:upperBound)

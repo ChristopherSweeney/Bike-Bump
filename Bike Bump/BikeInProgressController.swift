@@ -13,7 +13,6 @@ import FirebaseAuth
 //TODO add bike bell detetion call back
 class BikeInProgressController: UIViewController, AudioEvents {
     
-    //singleton object to encapsulate listening functionallity
     static var listener:Listener?
     static var setupListener:Listener?
     
@@ -28,9 +27,9 @@ class BikeInProgressController: UIViewController, AudioEvents {
     @IBOutlet weak var rideButton: UIButton!
     
     //firebase
-    //static listener persists while object state reloads, need to co
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //dont setup every time, navigation popup controller?
         let user = FIRAuth.auth()?.currentUser
         if let name = user?.displayName {
@@ -45,13 +44,6 @@ class BikeInProgressController: UIViewController, AudioEvents {
         //setup processing graph
         BikeInProgressController.setupListener?.installSetUpTap()
         
-
-        
-        let defaults = UserDefaults.standard
-        if defaults.string(forKey: Constants.bikeBellFreq) == nil {
-            self.performSegue(withIdentifier: "settingsPage", sender: self)
-        }
-      
         BikeInProgressController.listener = BikeInProgressController.createAudioEngineWithRemoteParams()
         
         //setup audio
@@ -71,6 +63,14 @@ class BikeInProgressController: UIViewController, AudioEvents {
         rideButton.addTarget(self, action: #selector(self.didTouch), for:  UIControlEvents.touchDown)
         rideButton.addTarget(self, action: #selector(self.didLift), for:  UIControlEvents.touchUpInside)
         settings.addTarget(self, action: #selector(self.settingsPage), for: UIControlEvents.touchUpInside)
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let defaults = UserDefaults.standard
+        if defaults.string(forKey: Constants.bikeBellFreq) == nil {
+            self.performSegue(withIdentifier: "settingsPage", sender: self)
+        }
 
     }
     
@@ -170,6 +170,7 @@ class BikeInProgressController: UIViewController, AudioEvents {
     }
     
     func settingsPage() {
+        BikeInProgressController.listener?.stopListening()
         self.performSegue(withIdentifier: "settingsPage", sender: self)
     }
 
