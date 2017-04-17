@@ -27,10 +27,7 @@ class setupViewController: UIViewController,AudioEvents {
     }
     
     func didPressListenBell() {
-        
-        BikeInProgressController.listener = BikeInProgressController.createAudioEngineWithRemoteParams()
-        //setup audio
-        
+                
         BikeInProgressController.setupListener?.delegate = self
         
         BikeInProgressController.setupListener?.startListening()
@@ -41,7 +38,9 @@ class setupViewController: UIViewController,AudioEvents {
     }
     
     func returnToHome() {
-        BikeInProgressController.setupListener?.stopListening()
+        if(BikeInProgressController.setupListener?.isListening())!{
+            BikeInProgressController.setupListener?.stopListening()
+        }
         self.performSegue(withIdentifier: "returnHome", sender: self)
     }
     

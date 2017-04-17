@@ -22,6 +22,8 @@ protocol AudioEvents:class {
 
 public class Listener: NSObject {
     
+    static let audioSession = AVAudioSession.sharedInstance()
+
     //UI delegate
     weak var delegate:AudioEvents?
 
@@ -39,7 +41,6 @@ public class Listener: NSObject {
     
     //audio graph params
     var audioEngine:AVAudioEngine = AVAudioEngine()
-    var audioSession = AVAudioSession.sharedInstance()
     var inputNode:AVAudioInputNode//microphone node
     var filter:AVAudioUnitEQ//lowpass filter
     
@@ -92,33 +93,43 @@ public class Listener: NSObject {
         
     }
     
+    public func setUpThreads() {
+        print("initializing listener with folllowing parameters...")
+        printParams()
+        do {
+            try Listener.audioSession.setPreferredSampleRate(Double(self.samplingRate))
+        }
+        catch {
+            //cancel recording if any problems
+            print("something went wrong with audio setup")
+            return
+        }
+        //higher level audio setup - pipeline
+        self.setupFilter()
+        self.audioEngine.attach(self.filter)
+        self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
+        
+        //TODO: keep longer buffer, cut out needed buffer based on time stamp
+
+        
+    }
     /**
      initialize audio via audio session and setting up audio graph pipline
      */
-    public func initializeAudio() {
-        print("initializing listener with folllowing parameters...")
-        printParams()
+    public static func initializeAudio() {
         //audio session setup (lower level mic config)
           do {
-                try audioSession.setActive(true)
-                try audioSession.setCategory(AVAudioSessionCategoryRecord)
-                try audioSession.setPreferredSampleRate(Double(self.samplingRate))
-                try audioSession.setPreferredInputNumberOfChannels(1)
-                try audioSession.setMode(AVAudioSessionModeMeasurement)
+                try Listener.audioSession.setActive(true)
+                try Listener.audioSession.setCategory(AVAudioSessionCategoryRecord)
+                try Listener.audioSession.setPreferredInputNumberOfChannels(1)
+                try Listener.audioSession.setMode(AVAudioSessionModeMeasurement)
             }
             catch {
                 //cancel recording if any problems
                 print("something went wrong with audio setup")
                 return
             }
-        
-            //higher level audio setup - pipeline
-            self.setupFilter()
-            self.audioEngine.attach(self.filter)
-            self.audioEngine.connect(inputNode, to:self.filter , format: self.inputNode.inputFormat(forBus: 0))
-        
-            //TODO: keep longer buffer, cut out needed buffer based on time stamp
-    }
+        }
     
     public func installSetUpTap() {
         self.filter.installTap(onBus: 0, bufferSize: 8192 , format: self.filter.inputFormat(forBus: 0)) {
@@ -236,7 +247,7 @@ public class Listener: NSObject {
      */
     public func startListening() {
         //offload initialization so you can start and stop
-        audioSession.requestRecordPermission({(permissionGranted: Bool) -> Void in
+        Listener.audioSession.requestRecordPermission({(permissionGranted: Bool) -> Void in
             if permissionGranted {
                 do {
                     try self.audioEngine.start()
@@ -256,9 +267,12 @@ public class Listener: NSObject {
     public func stopListening() {
         audioEngine.stop()
         currentSoundBuffers.removeAll()
-        do {
-          try audioSession.setActive(false)
            vDSP_destroy_fftsetup(fftSetup)
+    }
+    
+    public static func endAudioSession() {
+        do{
+            try audioSession.setActive(false)
         }
         catch {
             print("could not end session")

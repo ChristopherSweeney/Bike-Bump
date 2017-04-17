@@ -36,18 +36,23 @@ class BikeInProgressController: UIViewController, AudioEvents {
             self.welcomeField.text = "Welcome " + name
         }
         
+        //turn on mic
+        Listener.initializeAudio()
+        
         BikeInProgressController.setupListener = BikeInProgressController.createAudioEngineWithRemoteParams()
         
         //setup audio
-        BikeInProgressController.setupListener?.initializeAudio()
+        BikeInProgressController.setupListener?.setUpThreads()
         
         //setup processing graph
         BikeInProgressController.setupListener?.installSetUpTap()
         
+        
+        
         BikeInProgressController.listener = BikeInProgressController.createAudioEngineWithRemoteParams()
         
         //setup audio
-        BikeInProgressController.listener?.initializeAudio()
+        BikeInProgressController.listener?.setUpThreads()
         
         //setup processing graph
         BikeInProgressController.listener?.installTaps()
@@ -170,7 +175,9 @@ class BikeInProgressController: UIViewController, AudioEvents {
     }
     
     func settingsPage() {
-        BikeInProgressController.listener?.stopListening()
+        if(BikeInProgressController.listener?.isListening())!{
+            BikeInProgressController.listener?.stopListening()
+        }
         self.performSegue(withIdentifier: "settingsPage", sender: self)
     }
 
