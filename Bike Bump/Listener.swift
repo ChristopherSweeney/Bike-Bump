@@ -315,20 +315,24 @@ public class Listener: NSObject {
      */
     private func detectBell(buffer:AVAudioPCMBuffer) -> Bool {
         let defaults = UserDefaults.standard
-
         var roots:[Float] = self.fft(buffer: buffer)
-        self.targetFrequncy = Int(defaults.string(forKey: Constants.bikeBellFreq)!)!
-        let lowerBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)
-        let upperBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)
-        let crest:Int = self.geMaxIndex(array: &roots, lowerBound:lowerBound, upperBound:upperBound)
-
-        print(indexToFrequency(N:n,index:self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count)))
-        print(indexToFrequency(N: n, index: crest))
-        let indexWidthForSlope = self.frequencyToIndex(N: n, freq: slopeWidth)
         
-        let frontSlope:Float = calculateSlope(index: crest, width: indexWidthForSlope, array: &roots)
-        let backSlope:Float = calculateSlope(index: crest, width: -indexWidthForSlope, array: &roots)
-        return true
+        //algorithm 1
+        
+//        let lowerBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy-targetFrequncyThreshold)
+//        let upperBound:Int = self.frequencyToIndex(N: n, freq: targetFrequncy+targetFrequncyThreshold)
+//        let crest:Int = self.geMaxIndex(array: &roots, lowerBound:lowerBound, upperBound:upperBound)
+//        let indexWidthForSlope = self.frequencyToIndex(N: n, freq: slopeWidth)
+//        let frontSlope:Float = calculateSlope(index: crest, width: indexWidthForSlope, array: &roots)
+//        let backSlope:Float = calculateSlope(index: crest, width: -indexWidthForSlope, array: &roots)
+
+//        print(indexToFrequency(N:n,index:self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count)))
+//        print(indexToFrequency(N: n, index: crest))
+        
+        //algorithm 2
+        self.targetFrequncy = Int(defaults.string(forKey: Constants.bikeBellFreq)!)!
+        let totalMax = self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count)
+        return abs(totalMax-self.targetFrequncy) < 50
     }
     
     
