@@ -132,7 +132,7 @@ public class Listener: NSObject {
         }
     
     public func installSetUpTap() {
-        self.filter.installTap(onBus: 0, bufferSize: 8192 , format: self.filter.inputFormat(forBus: 0)) {
+        self.filter.installTap(onBus: 0, bufferSize: AVAudioFrameCount(self.n) , format: self.filter.inputFormat(forBus: 0)) {
             (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
             let freq:Int = self.getBellFreq(buffer: buffer)
             print(freq)
@@ -267,7 +267,10 @@ public class Listener: NSObject {
     public func stopListening() {
         audioEngine.stop()
         currentSoundBuffers.removeAll()
-           vDSP_destroy_fftsetup(fftSetup)
+    }
+    
+    deinit {
+        vDSP_destroy_fftsetup(fftSetup)
     }
     
     public static func endAudioSession() {
@@ -304,8 +307,8 @@ public class Listener: NSObject {
     }
     
     private func getBellFreq(buffer:AVAudioPCMBuffer) -> Int {
-        let roots:[Float] = self.fft(buffer: buffer)
-        let maxFreq = self.indexToFrequency(N: n, index:roots.index(of:roots.max()!)!)
+        var roots:[Float] = self.fft(buffer: buffer)
+        let maxFreq = self.indexToFrequency(N: n, index:self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count))
        
         return Int(maxFreq)
     }
@@ -331,8 +334,10 @@ public class Listener: NSObject {
         
         //algorithm 2
         self.targetFrequncy = Int(defaults.string(forKey: Constants.bikeBellFreq)!)!
-        let totalMax = self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count)
-        return abs(totalMax-self.targetFrequncy) < 50
+        let maxFreq = self.indexToFrequency(N: n, index:self.geMaxIndex(array: &roots, lowerBound:0, upperBound:roots.count))
+        print("target freq:" + String(self.targetFrequncy))
+        print(maxFreq)
+        return abs(maxFreq-Double(self.targetFrequncy)) < 50
     }
     
     

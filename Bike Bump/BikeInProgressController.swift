@@ -39,6 +39,8 @@ class BikeInProgressController: UIViewController, AudioEvents {
         //turn on mic
         Listener.initializeAudio()
         
+        
+        
         BikeInProgressController.setupListener = BikeInProgressController.createAudioEngineWithRemoteParams()
         
         //setup audio
@@ -46,6 +48,8 @@ class BikeInProgressController: UIViewController, AudioEvents {
         
         //setup processing graph
         BikeInProgressController.setupListener?.installSetUpTap()
+        
+        
         
         
         

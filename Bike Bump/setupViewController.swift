@@ -46,16 +46,20 @@ class setupViewController: UIViewController,AudioEvents {
     
     
     func ringDetected(centerFreq:Int) {
-        self.listenBell.backgroundColor = UIColor.yellow
-        let fadeTime = DispatchTime.now() + .seconds(1)
+        DispatchQueue.main.async {
+            self.listenBell.backgroundColor = UIColor.yellow
+            self.listenBell.titleLabel!.text = "Calibrated!"
+        }
+        let fadeTime = DispatchTime.now() + .seconds(2)
         DispatchQueue.main.asyncAfter(deadline: fadeTime) {
             self.listenBell.backgroundColor = UIColor.green
+            self.listenBell.titleLabel!.text = "Listen to Bell"
+
         }
         let defaults = UserDefaults.standard
         defaults.set(centerFreq, forKey: Constants.bikeBellFreq)
        
-        BikeInProgressController.listener?.stopListening()
-        self.returnToHome()
+        BikeInProgressController.setupListener?.stopListening()
     }
 
     
